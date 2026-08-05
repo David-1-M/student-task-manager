@@ -3,7 +3,7 @@ using StudentTaskManager.Services;
 using StudentTaskManager.ViewModels;
 using StudentTaskManager.Views;
 
-namespace StudentTaskManager.Views;
+namespace StudentTaskManager;
 
 public static class MauiProgram
 {
