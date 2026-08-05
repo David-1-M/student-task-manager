@@ -1,20 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using StudentTaskManager.Services;
 
 namespace StudentTaskManager.ViewModels;
 
-public partial class LoginViewModel : BaseViewModel
+public partial class LoginViewModel : ObservableObject
 {
-    private readonly AuthenticationService _authenticationService;
-
-    public LoginViewModel(AuthenticationService authenticationService)
-    {
-        _authenticationService = authenticationService;
-
-        Title = "Login";
-    }
-
     [ObservableProperty]
     private string email = string.Empty;
 
@@ -22,43 +12,11 @@ public partial class LoginViewModel : BaseViewModel
     private string password = string.Empty;
 
     [RelayCommand]
-    private async Task LoginAsync()
+    private async Task Login()
     {
-        if (IsBusy)
-            return;
-
-        IsBusy = true;
-
-        try
-        {
-            var user = await _authenticationService.LoginAsync(Email, Password);
-
-            if (user == null)
-            {
-                await Shell.Current.DisplayAlert(
-                    "Login Failed",
-                    "Invalid email or password.",
-                    "OK");
-
-                return;
-            }
-
-            await Shell.Current.DisplayAlert(
-                "Welcome",
-                $"Welcome back, {user.Name}!",
-                "Continue");
-
-            // We'll navigate to the Home Page later.
-        }
-        finally
-        {
-            IsBusy = false;
-        }
-    }
-
-    [RelayCommand]
-    private async Task GoToRegisterAsync()
-    {
-        await Shell.Current.GoToAsync("//RegisterPage");
+        await Application.Current.MainPage.DisplayAlert(
+            "Login",
+            $"Welcome {Email}",
+            "OK");
     }
 }
