@@ -1,10 +1,16 @@
-﻿namespace StudentTaskManager
+﻿using StudentTaskManager.Views;
+
+namespace StudentTaskManager;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+
+        Routing.RegisterRoute(nameof(RegisterPage), typeof(RegisterPage));
+        Routing.RegisterRoute(nameof(HomePage), typeof(HomePage));
+        Routing.RegisterRoute(nameof(AddTaskPage), typeof(AddTaskPage));
+        Routing.RegisterRoute(nameof(EditTaskPage), typeof(EditTaskPage));
     }
 }

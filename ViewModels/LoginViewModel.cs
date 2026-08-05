@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+
 namespace StudentTaskManager.ViewModels;
 
 public partial class LoginViewModel : ObservableObject
@@ -18,5 +19,11 @@ public partial class LoginViewModel : ObservableObject
             "Login",
             $"Welcome {Email}",
             "OK");
+    }
+
+    [RelayCommand]
+    private async Task Register()
+    {
+        await Shell.Current.GoToAsync("RegisterPage");
     }
 }
