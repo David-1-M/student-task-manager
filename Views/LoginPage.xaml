@@ -1,55 +1,57 @@
 <?xml version="1.0" encoding="utf-8" ?>
+
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="StudentTaskManager.Views.LoginPage"
-    Title="Login"
-    BackgroundColor="#F2F2F7">
+    Title="Login">
 
     <ScrollView>
 
         <VerticalStackLayout
             Padding="30"
-            VerticalOptions="Center"
-            Spacing="20">
+            Spacing="20"
+            VerticalOptions="Center">
 
             <Label
                 Text="📚"
                 FontSize="70"
-                HorizontalOptions="Center"/>
+                HorizontalOptions="Center" />
 
             <Label
                 Text="Student Task Manager"
-                FontSize="30"
+                FontSize="28"
                 FontAttributes="Bold"
-                HorizontalOptions="Center"/>
+                HorizontalOptions="Center" />
 
             <Label
-                Text="Welcome Back"
+                Text="Welcome back!"
+                FontSize="16"
                 HorizontalOptions="Center"
-                TextColor="Gray"/>
+                TextColor="Gray" />
 
             <Entry
                 Placeholder="Email"
-                Text="{Binding Email}"
-                Keyboard="Email"/>
+                Keyboard="Email"
+                Text="{Binding Email}" />
 
             <Entry
                 Placeholder="Password"
-                Text="{Binding Password}"
-                IsPassword="True"/>
+                IsPassword="True"
+                Text="{Binding Password}" />
 
             <Button
                 Text="Login"
                 HeightRequest="50"
-                CornerRadius="12"
-                BackgroundColor="#2563EB"
-                TextColor="White"
-                Command="{Binding LoginCommand}"/>
+                CornerRadius="10"
+                Command="{Binding LoginCommand}" />
 
             <Button
                 Text="Create Account"
-                Command="{Binding RegisterCommand}" /> 
+                HeightRequest="50"
+                CornerRadius="10"
+                Command="{Binding RegisterCommand}" />
+
         </VerticalStackLayout>
 
     </ScrollView>

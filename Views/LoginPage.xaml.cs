@@ -4,9 +4,9 @@ namespace StudentTaskManager.Views;
 
 public partial class LoginPage : ContentPage
 {
-    public LoginPage(LoginViewModel viewModel)
+    public LoginPage(LoginViewModel vm)
     {
         InitializeComponent();
-        BindingContext = viewModel;
+        BindingContext = vm;
     }
 }
