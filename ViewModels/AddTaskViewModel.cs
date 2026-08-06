@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.VisualBasic;
 using StudentTaskManager.Models;
 using StudentTaskManager.Services;
 
@@ -36,10 +35,11 @@ public partial class AddTaskViewModel : ObservableObject
                 "Error",
                 "Please enter a title.",
                 "OK");
+
             return;
         }
 
-        var task = new TaskItem
+        TaskItem task = new()
         {
             Title = Title,
             Description = Description,
