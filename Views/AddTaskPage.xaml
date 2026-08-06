@@ -22,6 +22,22 @@
             Placeholder="Category"
             Text="{Binding Category}" />
 
+            <Picker
+                Title="Priority"
+                SelectedItem="{Binding Priority}">
+
+                <Picker.Items>
+
+                    <x:String>Low</x:String>
+
+                    <x:String>Medium</x:String>
+
+                    <x:String>High</x:String>
+
+                </Picker.Items>
+
+            </Picker>
+
             <DatePicker
             Date="{Binding DueDate}" />
 

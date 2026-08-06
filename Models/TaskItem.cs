@@ -18,4 +18,15 @@ public class TaskItem
     public DateTime DueDate { get; set; }
 
     public bool IsCompleted { get; set; }
+
+
+    public string StatusText
+    {
+        get
+        {
+            return IsCompleted
+                ? "✅ Completed"
+                : "⏳ Pending";
+        }
+    }
 }

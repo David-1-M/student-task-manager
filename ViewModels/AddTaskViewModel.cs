@@ -21,6 +21,9 @@ public partial class AddTaskViewModel : ObservableObject
     [ObservableProperty]
     private DateTime dueDate = DateTime.Today;
 
+    [ObservableProperty]
+    private string priority = "Medium";
+
     public AddTaskViewModel(DatabaseService database)
     {
         _database = database;

@@ -45,29 +45,43 @@
                 <DataTemplate>
 
                     <Frame
-                        Margin="5"
-                        Padding="10">
+                        Margin="6"
+                        Padding="15"
+                        CornerRadius="12"
+                        HasShadow="True"
+                        BorderColor="LightGray">
 
-                        <VerticalStackLayout>
-
-                            <Label
-                                FontSize="18"
-                                FontAttributes="Bold"
-                                Text="{Binding Title}" />
-
-                            <Label
-                                Text="{Binding Description}" />
+                        <VerticalStackLayout
+                            Spacing="6">
 
                             <Label
-                                Text="{Binding Category}" />
+                                Text="{Binding Title}"
+                                FontSize="20"
+                                FontAttributes="Bold"/>
+
+                            <Label
+                                Text="{Binding Description}"
+                                FontSize="14"/>
+
+                            <HorizontalStackLayout
+                                Spacing="12">
+
+                            <Label
+                                Text="{Binding Category}"
+                                FontAttributes="Bold"/>
 
                             <Label
                                 Text="{Binding DueDate,
-                                StringFormat='Due: {0:dd MMM yyyy}'}"/>
+                                StringFormat='📅 {0:dd MMM yyyy}'}"/>
 
                             <Label
-                                Text="{Binding IsCompleted,
-                                StringFormat='Completed: {0}'}"/>
+                                Text="{Binding Priority}" />
+                        </HorizontalStackLayout>
+
+                            <Label
+                            Text="{Binding StatusText}"
+                            FontAttributes="Italic"/>
+                            
 
                         </VerticalStackLayout>
 
