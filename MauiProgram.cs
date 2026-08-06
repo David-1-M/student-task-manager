@@ -28,6 +28,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<LoginViewModel>();
         builder.Services.AddTransient<RegisterViewModel>();
         builder.Services.AddTransient<AddTaskViewModel>();
+        builder.Services.AddTransient<EditTaskViewModel>();
 
         // Pages
         builder.Services.AddSingleton<LoginPage>();

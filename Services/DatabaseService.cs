@@ -57,4 +57,16 @@ public class DatabaseService
     {
         await Database.InsertAsync(task);
     }
+
+    public async Task UpdateTaskAsync(TaskItem task)
+    {
+        await Database.UpdateAsync(task);
+    }
+
+    public async Task<TaskItem?> GetTaskByIdAsync(int id)
+    {
+        return await Database.Table<TaskItem>()
+                             .Where(t => t.Id == id)
+                             .FirstOrDefaultAsync();
+    }
 }
