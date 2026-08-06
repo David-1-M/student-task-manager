@@ -7,53 +7,58 @@
     Title="My Tasks">
 
     <Grid Padding="20"
-          RowDefinitions="Auto,*,Auto">
+      RowDefinitions="Auto,*,Auto">
 
         <Label
-            Text="My Tasks"
-            FontSize="28"
-            FontAttributes="Bold"/>
+        Text="My Tasks"
+        FontSize="28"
+        FontAttributes="Bold"/>
 
         <CollectionView
-            ItemsSource="{Binding Tasks}"
-            SelectionMode="Single"
-            SelectionChanged="CollectionView_SelectionChanged">
+        Grid.Row="1"
+        ItemsSource="{Binding Tasks}"
+        SelectionMode="Single"
+        SelectedItem="{Binding SelectedTask}">
 
             <CollectionView.ItemTemplate>
+
                 <DataTemplate>
+
                     <Frame
-                Margin="5"
-                Padding="10">
+                    Margin="5"
+                    Padding="10">
 
                         <VerticalStackLayout>
 
                             <Label
-                        FontAttributes="Bold"
-                        FontSize="18"
-                        Text="{Binding Title}" />
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            Text="{Binding Title}" />
 
                             <Label
-                        Text="{Binding Description}" />
+                            Text="{Binding Description}" />
 
                             <Label
-                        Text="{Binding Category}" />
+                            Text="{Binding Category}" />
 
                             <Label
-                        Text="{Binding DueDate,
-                        StringFormat='Due: {0:dd MMM yyyy}'}"/>
+                            Text="{Binding DueDate,
+                            StringFormat='Due: {0:dd MMM yyyy}'}"/>
 
                         </VerticalStackLayout>
 
                     </Frame>
+
                 </DataTemplate>
+
             </CollectionView.ItemTemplate>
 
         </CollectionView>
 
         <Button
-            Grid.Row="2"
-            Text="Add Task"
-            Command="{Binding AddTaskCommand}" />
+        Grid.Row="2"
+        Text="Add Task"
+        Command="{Binding AddTaskCommand}" />
 
     </Grid>
 

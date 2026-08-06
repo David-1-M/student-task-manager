@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.VisualBasic;
 using StudentTaskManager.Models;
 using StudentTaskManager.Services;
 
@@ -56,6 +55,26 @@ public partial class EditTaskViewModel : ObservableObject
         _task.DueDate = DueDate;
 
         await _database.UpdateTaskAsync(_task);
+
+        await Shell.Current.GoToAsync("..");
+    }
+
+    [RelayCommand]
+    private async Task Delete()
+    {
+        if (_task == null)
+            return;
+
+        bool answer = await Shell.Current.DisplayAlert(
+            "Delete Task",
+            "Are you sure you want to delete this task?",
+            "Yes",
+            "No");
+
+        if (!answer)
+            return;
+
+        await _database.DeleteTaskAsync(_task);
 
         await Shell.Current.GoToAsync("..");
     }

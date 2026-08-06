@@ -69,4 +69,9 @@ public class DatabaseService
                              .Where(t => t.Id == id)
                              .FirstOrDefaultAsync();
     }
+    
+    public async Task DeleteTaskAsync(TaskItem task)
+    {
+        await Database.DeleteAsync(task);
+    }
 }

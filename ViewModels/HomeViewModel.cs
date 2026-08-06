@@ -35,4 +35,21 @@ public partial class HomeViewModel : ObservableObject
     {
         await Shell.Current.GoToAsync(nameof(AddTaskPage));
     }
+
+    [ObservableProperty]
+    private TaskItem? selectedTask;
+
+    partial void OnSelectedTaskChanged(TaskItem? value)
+    {
+        if (value == null)
+            return;
+
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            await Shell.Current.GoToAsync(
+                $"{nameof(EditTaskPage)}?TaskId={value.Id}");
+
+            SelectedTask = null;
+        });
+    }
 }
