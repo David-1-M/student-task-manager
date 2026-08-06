@@ -28,6 +28,17 @@
             <DatePicker
                 Date="{Binding DueDate}" />
 
+            <HorizontalStackLayout>
+
+                <CheckBox
+                    IsChecked="{Binding IsCompleted}" />
+
+                <Label
+                    VerticalOptions="Center"
+                    Text="Completed"/>
+
+            </HorizontalStackLayout>
+
             <Button
                 Text="Save Changes"
                 Command="{Binding SaveCommand}" />

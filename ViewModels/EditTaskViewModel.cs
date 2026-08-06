@@ -24,6 +24,9 @@ public partial class EditTaskViewModel : ObservableObject
     [ObservableProperty]
     private DateTime dueDate = DateTime.Today;
 
+    [ObservableProperty]
+    private bool isCompleted;
+
     public EditTaskViewModel(DatabaseService database)
     {
         _database = database;
@@ -32,6 +35,8 @@ public partial class EditTaskViewModel : ObservableObject
     [RelayCommand]
     private async Task LoadTask(int id)
     {
+        _task.IsCompleted = isCompleted;
+
         _task = await _database.GetTaskByIdAsync(id);
 
         if (_task == null)
@@ -41,6 +46,7 @@ public partial class EditTaskViewModel : ObservableObject
         Description = _task.Description;
         Category = _task.Category;
         DueDate = _task.DueDate;
+        isCompleted = _task.IsCompleted;
     }
 
     [RelayCommand]

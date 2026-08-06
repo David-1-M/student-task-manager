@@ -11,13 +11,26 @@ public partial class HomeViewModel : ObservableObject
 {
     private readonly DatabaseService _database;
 
-    public ObservableCollection<TaskItem> Tasks { get; }
-        = new();
+    public ObservableCollection<TaskItem> Tasks { get; } = new();
 
     public HomeViewModel(DatabaseService database)
     {
         _database = database;
     }
+
+    [ObservableProperty]
+    private TaskItem? selectedTask;
+
+
+    [ObservableProperty]
+    private int totalTasks;
+
+    [ObservableProperty]
+    private int completedTasks;
+
+    [ObservableProperty]
+    private int pendingTasks;
+
 
     [RelayCommand]
     private async Task LoadTasks()
@@ -28,6 +41,12 @@ public partial class HomeViewModel : ObservableObject
 
         foreach (var task in tasks)
             Tasks.Add(task);
+
+        totalTasks = Tasks.Count;
+
+        completedTasks = Tasks.Count(t => t.IsCompleted);
+
+        pendingTasks = Tasks.Count(t => !t.IsCompleted);
     }
 
     [RelayCommand]
@@ -35,9 +54,6 @@ public partial class HomeViewModel : ObservableObject
     {
         await Shell.Current.GoToAsync(nameof(AddTaskPage));
     }
-
-    [ObservableProperty]
-    private TaskItem? selectedTask;
 
     partial void OnSelectedTaskChanged(TaskItem? value)
     {
