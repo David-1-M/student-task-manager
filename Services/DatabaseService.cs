@@ -24,11 +24,6 @@ public class DatabaseService
 
     public SQLiteAsyncConnection Database => _database!;
 
-    public async Task<int> AddUserAsync(User user)
-    {
-        return await Database.InsertAsync(user);
-    }
-
     public async Task<User> GetUserAsync(string email)
     {
         return await Database.Table<User>()
@@ -39,6 +34,18 @@ public class DatabaseService
     public async Task<List<User>> GetUsersAsync()
     {
         return await Database.Table<User>().ToListAsync();
+    }
+
+    public async Task<int> AddUserAsync(User user)
+    {
+        return await _database.InsertAsync(user);
+    }
+
+    public async Task<User?> GetUserByEmailAsync(string email)
+    {
+        return await _database.Table<User>()
+                              .Where(x => x.Email == email)
+                              .FirstOrDefaultAsync();
     }
 
 }

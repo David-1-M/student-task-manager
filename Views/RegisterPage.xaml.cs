@@ -1,9 +1,12 @@
+using StudentTaskManager.ViewModels;
+
 namespace StudentTaskManager.Views;
 
 public partial class RegisterPage : ContentPage
 {
-	public RegisterPage()
-	{
-		InitializeComponent();
-	}
+    public RegisterPage(RegisterViewModel vm)
+    {
+        InitializeComponent();
+        BindingContext = vm;
+    }
 }

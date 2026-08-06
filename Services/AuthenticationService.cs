@@ -1,5 +1,4 @@
-﻿using BCrypt.Net;
-using StudentTaskManager.Models;
+﻿using StudentTaskManager.Models;
 
 namespace StudentTaskManager.Services;
 
@@ -12,42 +11,30 @@ public class AuthenticationService
         _database = database;
     }
 
-    public async Task<bool> RegisterAsync(string name, string email, string password)
+    public async Task<bool> Register(User user)
     {
-        await _database.InitializeAsync();
+        var existing =
+            await _database.GetUserByEmailAsync(user.Email);
 
-        var existingUser = await _database.Database.Table<User>()
-            .Where(u => u.Email == email)
-            .FirstOrDefaultAsync();
-
-        if (existingUser != null)
+        if (existing != null)
             return false;
 
-        var user = new User
-        {
-            Name = name,
-            Email = email,
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword(password)
-        };
-
-        await _database.Database.InsertAsync(user);
+        await _database.AddUserAsync(user);
 
         return true;
     }
 
-    public async Task<User?> LoginAsync(string email, string password)
+    public async Task<User?> Login(string email, string password)
     {
-        await _database.InitializeAsync();
-
-        var user = await _database.Database.Table<User>()
-            .Where(u => u.Email == email)
-            .FirstOrDefaultAsync();
+        var user =
+            await _database.GetUserByEmailAsync(email);
 
         if (user == null)
             return null;
 
-        return BCrypt.Net.BCrypt.Verify(password, user.PasswordHash)
-            ? user
-            : null;
+        if (user.Password != password)
+            return null;
+
+        return user;
     }
 }
