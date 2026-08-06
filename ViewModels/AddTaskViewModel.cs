@@ -27,19 +27,19 @@ public partial class AddTaskViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task Save()
+    private async Task SaveTask()
     {
         if (string.IsNullOrWhiteSpace(Title))
         {
             await Shell.Current.DisplayAlert(
                 "Error",
-                "Please enter a title.",
+                "Task title is required.",
                 "OK");
 
             return;
         }
 
-        TaskItem task = new()
+        var task = new TaskItem
         {
             Title = Title,
             Description = Description,

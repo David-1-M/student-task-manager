@@ -5,33 +5,31 @@
     Title="Add Task">
 
     <ScrollView>
-
         <VerticalStackLayout
-            Padding="20"
-            Spacing="15">
+        Padding="20"
+        Spacing="15">
 
             <Entry
-                Placeholder="Title"
-                Text="{Binding Title}" />
+            Placeholder="Title"
+            Text="{Binding Title}" />
 
             <Editor
-                HeightRequest="100"
-                Placeholder="Description"
-                Text="{Binding Description}" />
+            Placeholder="Description"
+            HeightRequest="120"
+            Text="{Binding Description}" />
 
             <Entry
-                Placeholder="Category"
-                Text="{Binding Category}" />
+            Placeholder="Category"
+            Text="{Binding Category}" />
 
             <DatePicker
-                Date="{Binding DueDate}" />
+            Date="{Binding DueDate}" />
 
             <Button
-                Text="Save Task"
-                Command="{Binding SaveCommand}" />
+            Text="Save Task"
+            Command="{Binding SaveTaskCommand}" />
 
         </VerticalStackLayout>
-
     </ScrollView>
 
 </ContentPage>
