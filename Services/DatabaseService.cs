@@ -48,4 +48,9 @@ public class DatabaseService
                               .FirstOrDefaultAsync();
     }
 
+    public async Task<List<TaskItem>> GetTasksAsync()
+    {
+        return await Database.Table<TaskItem>().ToListAsync();
+    }
+
 }

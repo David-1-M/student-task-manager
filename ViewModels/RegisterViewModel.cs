@@ -29,6 +29,19 @@ public partial class RegisterViewModel : ObservableObject
     [RelayCommand]
     private async Task Register()
     {
+        if (string.IsNullOrWhiteSpace(FullName) ||
+            string.IsNullOrWhiteSpace(Email) ||
+            string.IsNullOrWhiteSpace(Password) ||
+            string.IsNullOrWhiteSpace(ConfirmPassword))
+        {
+            await Shell.Current.DisplayAlert(
+                "Missing Information",
+                "Please complete all fields.",
+                "OK");
+
+            return;
+        }
+
         if (Password != ConfirmPassword)
         {
             await Shell.Current.DisplayAlert(
@@ -41,19 +54,18 @@ public partial class RegisterViewModel : ObservableObject
 
         User user = new()
         {
-            FullName = FullName,
-            Email = Email,
+            FullName = FullName.Trim(),
+            Email = Email.Trim(),
             Password = Password
         };
 
-        bool success =
-            await _authentication.Register(user);
+        bool success = await _authentication.Register(user);
 
         if (!success)
         {
             await Shell.Current.DisplayAlert(
-                "Error",
-                "Email already exists.",
+                "Registration Failed",
+                "This email is already registered.",
                 "OK");
 
             return;
@@ -61,7 +73,7 @@ public partial class RegisterViewModel : ObservableObject
 
         await Shell.Current.DisplayAlert(
             "Success",
-            "Account created successfully.",
+            "Account created successfully!",
             "OK");
 
         await Shell.Current.GoToAsync("..");

@@ -34,6 +34,7 @@ public static class MauiProgram
         builder.Services.AddTransient<HomePage>();
         builder.Services.AddTransient<AddTaskPage>();
         builder.Services.AddTransient<EditTaskPage>();
+        builder.Services.AddSingleton<HomeViewModel>();
 
         return builder.Build();
     }

@@ -1,17 +1,57 @@
 <?xml version="1.0" encoding="utf-8" ?>
+
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="StudentTaskManager.Views.HomePage"
-    Title="Home">
+    Title="My Tasks">
 
-    <VerticalStackLayout Padding="20">
+    <Grid Padding="20"
+          RowDefinitions="Auto,*,Auto">
 
         <Label
-            Text="Home Page"
+            Text="My Tasks"
             FontSize="28"
-            HorizontalOptions="Center"/>
+            FontAttributes="Bold"/>
 
-    </VerticalStackLayout>
+        <CollectionView
+            Grid.Row="1"
+            ItemsSource="{Binding Tasks}">
+
+            <CollectionView.ItemTemplate>
+
+                <DataTemplate>
+
+                    <Frame Margin="0,5"
+                           BorderColor="Gray">
+
+                        <VerticalStackLayout>
+
+                            <Label
+                                Text="{Binding Title}"
+                                FontAttributes="Bold"/>
+
+                            <Label
+                                Text="{Binding Description}"/>
+
+                            <Label
+                                Text="{Binding DueDate}"/>
+
+                        </VerticalStackLayout>
+
+                    </Frame>
+
+                </DataTemplate>
+
+            </CollectionView.ItemTemplate>
+
+        </CollectionView>
+
+        <Button
+            Grid.Row="2"
+            Text="Add Task"
+            Command="{Binding AddTaskCommand}" />
+
+    </Grid>
 
 </ContentPage>
