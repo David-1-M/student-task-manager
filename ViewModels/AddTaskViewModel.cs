@@ -1,12 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.VisualBasic;
+using StudentTaskManager.Models;
+using StudentTaskManager.Services;
 
-namespace StudentTaskManager.ViewModels
+namespace StudentTaskManager.ViewModels;
+
+public partial class AddTaskViewModel : ObservableObject
 {
-    internal class AddTaskViewModel
+    private readonly DatabaseService _database;
+
+    [ObservableProperty]
+    private string title = string.Empty;
+
+    [ObservableProperty]
+    private string description = string.Empty;
+
+    [ObservableProperty]
+    private string category = string.Empty;
+
+    [ObservableProperty]
+    private DateTime dueDate = DateTime.Today;
+
+    public AddTaskViewModel(DatabaseService database)
     {
+        _database = database;
+    }
+
+    [RelayCommand]
+    private async Task Save()
+    {
+        if (string.IsNullOrWhiteSpace(Title))
+        {
+            await Shell.Current.DisplayAlert(
+                "Error",
+                "Please enter a title.",
+                "OK");
+            return;
+        }
+
+        var task = new TaskItem
+        {
+            Title = Title,
+            Description = Description,
+            Category = Category,
+            DueDate = DueDate,
+            IsCompleted = false
+        };
+
+        await _database.AddTaskAsync(task);
+
+        await Shell.Current.GoToAsync("..");
     }
 }

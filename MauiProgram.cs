@@ -27,6 +27,7 @@ public static class MauiProgram
         // ViewModels
         builder.Services.AddSingleton<LoginViewModel>();
         builder.Services.AddTransient<RegisterViewModel>();
+        builder.Services.AddTransient<AddTaskViewModel>();
 
         // Pages
         builder.Services.AddSingleton<LoginPage>();

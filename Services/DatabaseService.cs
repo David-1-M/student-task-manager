@@ -53,4 +53,8 @@ public class DatabaseService
         return await Database.Table<TaskItem>().ToListAsync();
     }
 
+    public async Task AddTaskAsync(TaskItem task)
+    {
+        await Database.InsertAsync(task);
+    }
 }
