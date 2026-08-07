@@ -45,6 +45,8 @@ public partial class HomeViewModel : ObservableObject
     [ObservableProperty]
     private string selectedSort = "Due Date";
 
+
+
     public HomeViewModel(DatabaseService database)
     {
         _database = database;
@@ -78,6 +80,8 @@ public partial class HomeViewModel : ObservableObject
             Tasks.Add(task);
         }
 
+        await RefreshTasks();
+
         TotalTasks = Tasks.Count;
         CompletedTasks = Tasks.Count(t => t.IsCompleted);
         PendingTasks = Tasks.Count(t => !t.IsCompleted);
@@ -91,11 +95,13 @@ public partial class HomeViewModel : ObservableObject
 
     partial void OnSearchTextChanged(string value)
     {
+        _ = RefreshTasks();
         LoadTasksCommand.Execute(null);
     }
 
     partial void OnSelectedCategoryChanged(string value)
     {
+        _ = RefreshTasks();
         LoadTasksCommand.Execute(null);
     }
 
@@ -124,4 +130,66 @@ public partial class HomeViewModel : ObservableObject
         "Priority",
         "Title"
     };
+
+    public List<string> FilterCategories { get; } =
+    new()
+    {
+        "All",
+        "School",
+        "Work",
+        "Personal",
+        "Shopping",
+        "Health",
+        "Finance",
+        "Other"
+    };
+
+    public int HighPriorityTasks =>
+    Tasks.Count(t => t.Priority == "High");
+
+    public int OverdueTasks =>
+        Tasks.Count(t => t.IsOverdue);
+
+    private async Task RefreshTasks()
+    {
+        Tasks.Clear();
+
+        var allTasks = await _database.GetTasksAsync();
+
+        IEnumerable<TaskItem> filtered = allTasks;
+
+        if (SelectedCategory != "All")
+        {
+            filtered = filtered.Where(t =>
+                t.Category == SelectedCategory);
+        }
+
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            filtered = filtered.Where(t =>
+                t.Title.Contains(SearchText,
+                StringComparison.OrdinalIgnoreCase)
+                ||
+                t.Description.Contains(SearchText,
+                StringComparison.OrdinalIgnoreCase));
+        }
+
+        foreach (var task in filtered)
+        {
+            Tasks.Add(task);
+        }
+
+        OnPropertyChanged(nameof(TotalTasks));
+        OnPropertyChanged(nameof(CompletedTasks));
+        OnPropertyChanged(nameof(PendingTasks));
+        OnPropertyChanged(nameof(IsTaskListEmpty));
+        OnPropertyChanged(nameof(HighPriorityTasks));
+        OnPropertyChanged(nameof(OverdueTasks));
+        OnPropertyChanged(nameof(CompletionProgress));
+    }
+    public double CompletionProgress =>
+    TotalTasks == 0
+        ? 0
+        : (double)CompletedTasks / TotalTasks;
+
 }

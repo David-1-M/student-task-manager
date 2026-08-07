@@ -16,13 +16,14 @@ public partial class AddTaskViewModel : ObservableObject
     private string description = string.Empty;
 
     [ObservableProperty]
-    private string category = "Assignments";
+    private string category = "School";
 
     [ObservableProperty]
     private DateTime dueDate = DateTime.Today;
 
     [ObservableProperty]
     private string priority = "Medium";
+
 
     public AddTaskViewModel(DatabaseService database)
     {
@@ -60,11 +61,16 @@ public partial class AddTaskViewModel : ObservableObject
     public List<string> Categories { get; } =
     new()
     {
+        "School",
+        "Work",
         "Assignments",
         "Projects",
         "Tests",
         "Meetings",
         "Personal",
+        "Shopping",
+        "Health",
+        "Finance",
         "Other"
     };
 

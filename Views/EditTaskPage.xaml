@@ -21,9 +21,10 @@
                 HeightRequest="120"
                 Text="{Binding Description}" />
 
-            <Entry
-                Placeholder="Category"
-                Text="{Binding Category}" />
+            <Picker
+                Title="Category"
+                ItemsSource="{Binding Categories}"
+                SelectedItem="{Binding Category}" />
 
             <DatePicker
                 Date="{Binding DueDate}" />

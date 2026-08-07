@@ -19,7 +19,7 @@ public partial class EditTaskViewModel : ObservableObject
     private string description = "";
 
     [ObservableProperty]
-    private string category = "";
+    private string category = "School";
 
     [ObservableProperty]
     private DateTime dueDate = DateTime.Today;
@@ -98,5 +98,17 @@ public partial class EditTaskViewModel : ObservableObject
     "High",
     "Medium",
     "Low"
+    };
+
+    public List<string> Categories { get; } =
+    new()
+    {
+        "School",
+        "Work",
+        "Personal",
+        "Shopping",
+        "Health",
+        "Finance",
+        "Other"
     };
 }

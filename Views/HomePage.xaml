@@ -20,6 +20,10 @@
                 FontSize="30"
                 FontAttributes="Bold" />
 
+            <ProgressBar
+                Progress="{Binding CompletionProgress}"
+                HeightRequest="8"/>
+
             <Grid
                 ColumnDefinitions="*,*,*"
                 ColumnSpacing="10">
@@ -96,6 +100,7 @@
             Placeholder="Search tasks..."
             Text="{Binding SearchText}" />
 
+
         <Picker
             Grid.Row="2"
             Title="Filter Category"
@@ -107,6 +112,12 @@
             Title="Sort By"
             ItemsSource="{Binding SortOptions}"
             SelectedItem="{Binding SelectedSort}" />
+
+        <Picker
+            Grid.Row="2"
+            Title="Filter"
+            ItemsSource="{Binding FilterCategories}"
+            SelectedItem="{Binding SelectedCategory}" />
 
         <!-- Task List -->
         <Grid Grid.Row="4">
@@ -138,7 +149,15 @@
                                 Text="{Binding Description}"
                                 LineBreakMode="TailTruncation"/>
 
-                            <HorizontalStackLayout
+                            <Label
+                                Text="{Binding HighPriorityTasks,
+                                StringFormat='High Priority: {0}'}"/>
+
+                            <Label
+                                Text="{Binding OverdueTasks,
+                                StringFormat='Overdue: {0}'}"/>
+
+                                <HorizontalStackLayout
                                     Spacing="10">
 
                                                 <Label
