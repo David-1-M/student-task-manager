@@ -6,8 +6,9 @@
     x:Class="StudentTaskManager.Views.HomePage"
     Title="My Tasks">
 
-    <Grid Padding="20"
-          RowDefinitions="Auto,*,Auto">
+    <Grid
+        Padding="20"
+        RowDefinitions="Auto,Auto,Auto,*,Auto">
 
         <!-- Header -->
         <VerticalStackLayout
@@ -34,17 +35,19 @@
         </VerticalStackLayout>
 
         <SearchBar
+            Grid.Row="1"
             Placeholder="Search tasks..."
             Text="{Binding SearchText}" />
 
         <Picker
+            Grid.Row="2"
             Title="Filter Category"
             ItemsSource="{Binding Categories}"
             SelectedItem="{Binding SelectedCategory}" />
 
         <!-- Task List -->
         <CollectionView
-            Grid.Row="1"
+            Grid.Row="3"
             ItemsSource="{Binding Tasks}"
             SelectionMode="Single"
             SelectedItem="{Binding SelectedTask}">
@@ -106,7 +109,7 @@
 
         <!-- Add Button -->
         <Button
-            Grid.Row="2"
+            Grid.Row="4"
             Text="Add Task"
             Command="{Binding AddTaskCommand}" />
 

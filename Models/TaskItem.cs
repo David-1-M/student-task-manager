@@ -20,49 +20,24 @@ public class TaskItem
     public bool IsCompleted { get; set; }
 
 
-    public string StatusText
+    public string StatusText =>
+    IsCompleted ? "✅ Completed" : "⏳ Pending";
+
+    public string PriorityDisplay =>
+    Priority switch
     {
-        get
-        {
-            return IsCompleted
-                ? "✅ Completed"
-                : "⏳ Pending";
-        }
-    }
+        "High" => "🔴 High",
+        "Medium" => "🟡 Medium",
+        _ => "🟢 Low"
+    };
 
-    public string PriorityDisplay
-    {
-        get
-        {
-            return Priority switch
-            {
-                "High" => "🔴 High",
-                "Medium" => "🟡 Medium",
-                _ => "🟢 Low"
-            };
-        }
-    }
+    public bool IsOverdue =>
+    !IsCompleted && DueDate.Date < DateTime.Today;
 
-    public bool IsOverdue
-    {
-        get
-        {
-            return !IsCompleted &&
-                   DueDate.Date < DateTime.Today;
-        }
-    }
-
-    public string DueStatus
-    {
-        get
-        {
-            if (IsCompleted)
-                return "✅ Completed";
-
-            if (IsOverdue)
-                return "⚠️ Overdue";
-
-            return "📅 Upcoming";
-        }
-    }
+    public string DueStatus =>
+    IsCompleted
+        ? "✅ Completed"
+        : IsOverdue
+            ? "⚠️ Overdue"
+            : "📅 Upcoming";
 }

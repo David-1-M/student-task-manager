@@ -2,8 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using StudentTaskManager.Models;
 using StudentTaskManager.Services;
-using System.Collections.ObjectModel;
 using StudentTaskManager.Views;
+using System.Collections.ObjectModel;
 
 namespace StudentTaskManager.ViewModels;
 
@@ -13,14 +13,25 @@ public partial class HomeViewModel : ObservableObject
 
     public ObservableCollection<TaskItem> Tasks { get; } = new();
 
-    public HomeViewModel(DatabaseService database)
-    {
-        _database = database;
-    }
+    public List<string> Categories { get; } =
+    [
+        "All",
+        "Assignments",
+        "Projects",
+        "Tests",
+        "Meetings",
+        "Personal",
+        "Other"
+    ];
 
     [ObservableProperty]
     private TaskItem? selectedTask;
 
+    [ObservableProperty]
+    private string searchText = "";
+
+    [ObservableProperty]
+    private string selectedCategory = "All";
 
     [ObservableProperty]
     private int totalTasks;
@@ -31,52 +42,10 @@ public partial class HomeViewModel : ObservableObject
     [ObservableProperty]
     private int pendingTasks;
 
-    [ObservableProperty]
-    private string searchText = "";
-
-    [ObservableProperty]
-    private string selectedCategory = "All";
-
-    partial void OnSelectedCategoryChanged(string value)
+    public HomeViewModel(DatabaseService database)
     {
-        FilterTasks();
+        _database = database;
     }
-
-    partial void OnSearchTextChanged(string value)
-    {
-        FilterTasks();
-    }
-
-    if (SelectedCategory != "All")
-    {
-        filtered = filtered.Where(x =>
-            x.Category == SelectedCategory);
-    }
-
-    private async void FilterTasks()
-    {
-        Tasks.Clear();
-
-        var tasks = await _database.GetTasksAsync();
-
-        var filtered = tasks.Where(t =>
-            t.Title.Contains(SearchText ?? "",
-            StringComparison.OrdinalIgnoreCase));
-
-        foreach (var task in filtered)
-            Tasks.Add(task);
-    }
-
-    public List<string> Categories { get; } =
-    new()
-    {
-        "All",
-        "Assignments",
-        "Projects",
-        "Tests",
-        "Meetings",
-        "Personal"
-    };
 
     [RelayCommand]
     private async Task LoadTasks()
@@ -85,20 +54,39 @@ public partial class HomeViewModel : ObservableObject
 
         var tasks = await _database.GetTasksAsync();
 
-        foreach (var task in tasks)
+        IEnumerable<TaskItem> filtered = tasks;
+
+        if (!string.IsNullOrWhiteSpace(SearchText))
+        {
+            filtered = filtered.Where(t =>
+                t.Title.Contains(SearchText,
+                StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (SelectedCategory != "All")
+        {
+            filtered = filtered.Where(t =>
+                t.Category == SelectedCategory);
+        }
+
+        foreach (var task in filtered)
+        {
             Tasks.Add(task);
+        }
 
-        totalTasks = Tasks.Count;
-
-        completedTasks = Tasks.Count(t => t.IsCompleted);
-
-        pendingTasks = Tasks.Count(t => !t.IsCompleted);
+        TotalTasks = Tasks.Count;
+        CompletedTasks = Tasks.Count(t => t.IsCompleted);
+        PendingTasks = Tasks.Count(t => !t.IsCompleted);
     }
 
-    [RelayCommand]
-    private async Task AddTask()
+    partial void OnSearchTextChanged(string value)
     {
-        await Shell.Current.GoToAsync(nameof(AddTaskPage));
+        LoadTasksCommand.Execute(null);
+    }
+
+    partial void OnSelectedCategoryChanged(string value)
+    {
+        LoadTasksCommand.Execute(null);
     }
 
     partial void OnSelectedTaskChanged(TaskItem? value)
@@ -106,12 +94,14 @@ public partial class HomeViewModel : ObservableObject
         if (value == null)
             return;
 
-        MainThread.BeginInvokeOnMainThread(async () =>
-        {
-            await Shell.Current.GoToAsync(
-                $"{nameof(EditTaskPage)}?TaskId={value.Id}");
+        Shell.Current.GoToAsync($"{nameof(EditTaskPage)}?TaskId={value.Id}");
 
-            SelectedTask = null;
-        });
+        SelectedTask = null;
+    }
+
+    [RelayCommand]
+    private async Task AddTask()
+    {
+        await Shell.Current.GoToAsync(nameof(AddTaskPage));
     }
 }
