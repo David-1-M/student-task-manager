@@ -31,6 +31,52 @@ public partial class HomeViewModel : ObservableObject
     [ObservableProperty]
     private int pendingTasks;
 
+    [ObservableProperty]
+    private string searchText = "";
+
+    [ObservableProperty]
+    private string selectedCategory = "All";
+
+    partial void OnSelectedCategoryChanged(string value)
+    {
+        FilterTasks();
+    }
+
+    partial void OnSearchTextChanged(string value)
+    {
+        FilterTasks();
+    }
+
+    if (SelectedCategory != "All")
+    {
+        filtered = filtered.Where(x =>
+            x.Category == SelectedCategory);
+    }
+
+    private async void FilterTasks()
+    {
+        Tasks.Clear();
+
+        var tasks = await _database.GetTasksAsync();
+
+        var filtered = tasks.Where(t =>
+            t.Title.Contains(SearchText ?? "",
+            StringComparison.OrdinalIgnoreCase));
+
+        foreach (var task in filtered)
+            Tasks.Add(task);
+    }
+
+    public List<string> Categories { get; } =
+    new()
+    {
+        "All",
+        "Assignments",
+        "Projects",
+        "Tests",
+        "Meetings",
+        "Personal"
+    };
 
     [RelayCommand]
     private async Task LoadTasks()

@@ -29,4 +29,40 @@ public class TaskItem
                 : "⏳ Pending";
         }
     }
+
+    public string PriorityDisplay
+    {
+        get
+        {
+            return Priority switch
+            {
+                "High" => "🔴 High",
+                "Medium" => "🟡 Medium",
+                _ => "🟢 Low"
+            };
+        }
+    }
+
+    public bool IsOverdue
+    {
+        get
+        {
+            return !IsCompleted &&
+                   DueDate.Date < DateTime.Today;
+        }
+    }
+
+    public string DueStatus
+    {
+        get
+        {
+            if (IsCompleted)
+                return "✅ Completed";
+
+            if (IsOverdue)
+                return "⚠️ Overdue";
+
+            return "📅 Upcoming";
+        }
+    }
 }

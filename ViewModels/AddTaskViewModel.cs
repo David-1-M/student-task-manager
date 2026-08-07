@@ -16,7 +16,7 @@ public partial class AddTaskViewModel : ObservableObject
     private string description = string.Empty;
 
     [ObservableProperty]
-    private string category = string.Empty;
+    private string category = "Assignments";
 
     [ObservableProperty]
     private DateTime dueDate = DateTime.Today;
@@ -55,4 +55,16 @@ public partial class AddTaskViewModel : ObservableObject
 
         await Shell.Current.GoToAsync("..");
     }
+
+    public List<string> Categories { get; } =
+    new()
+    {
+        "Assignments",
+        "Projects",
+        "Tests",
+        "Meetings",
+        "Personal",
+        "Other"
+    };
+
 }

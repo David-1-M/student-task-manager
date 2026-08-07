@@ -33,6 +33,15 @@
 
         </VerticalStackLayout>
 
+        <SearchBar
+            Placeholder="Search tasks..."
+            Text="{Binding SearchText}" />
+
+        <Picker
+            Title="Filter Category"
+            ItemsSource="{Binding Categories}"
+            SelectedItem="{Binding SelectedCategory}" />
+
         <!-- Task List -->
         <CollectionView
             Grid.Row="1"
@@ -75,14 +84,16 @@
                                 StringFormat='📅 {0:dd MMM yyyy}'}"/>
 
                             <Label
-                                Text="{Binding Priority}" />
+                                Text="{Binding PriorityDisplay}" />
                         </HorizontalStackLayout>
 
                             <Label
                             Text="{Binding StatusText}"
                             FontAttributes="Italic"/>
-                            
 
+
+                            <Label
+                                Text="{Binding DueStatus}" />
                         </VerticalStackLayout>
 
                     </Frame>
