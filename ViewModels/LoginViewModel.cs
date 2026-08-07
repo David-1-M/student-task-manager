@@ -7,15 +7,16 @@ namespace StudentTaskManager.ViewModels;
 
 public partial class LoginViewModel : ObservableObject
 {
+    private readonly AuthenticationService _authentication;
+
     [ObservableProperty]
     private string email = string.Empty;
 
     [ObservableProperty]
     private string password = string.Empty;
 
-    private readonly AuthenticationService _authentication;
-
-    public LoginViewModel(AuthenticationService authentication)
+    public LoginViewModel(
+        AuthenticationService authentication)
     {
         _authentication = authentication;
     }
@@ -27,14 +28,17 @@ public partial class LoginViewModel : ObservableObject
             string.IsNullOrWhiteSpace(Password))
         {
             await Shell.Current.DisplayAlert(
-                "Error",
-                "Enter your email and password.",
+                "Missing Information",
+                "Please enter your email and password.",
                 "OK");
 
             return;
         }
 
-        var user = await _authentication.Login(Email, Password);
+        var user =
+            await _authentication.Login(
+                Email,
+                Password);
 
         if (user == null)
         {
@@ -46,12 +50,17 @@ public partial class LoginViewModel : ObservableObject
             return;
         }
 
-        await Shell.Current.GoToAsync(nameof(HomePage));
+        // Clear password after successful login
+        Password = string.Empty;
+
+        await Shell.Current.GoToAsync(
+            nameof(HomePage));
     }
 
     [RelayCommand]
     private async Task Register()
     {
-        await Shell.Current.GoToAsync(nameof(RegisterPage));
+        await Shell.Current.GoToAsync(
+            nameof(RegisterPage));
     }
 }

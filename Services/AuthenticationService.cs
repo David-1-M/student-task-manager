@@ -13,26 +13,49 @@ public class AuthenticationService
 
     public async Task<bool> Register(User user)
     {
-        var existing =
-            await _database.GetUserByEmailAsync(user.Email);
+        await _database.InitializeAsync();
 
-        if (existing != null)
+        string email = user.Email.Trim().ToLowerInvariant();
+
+        var existingUser =
+            await _database.GetUserByEmailAsync(email);
+
+        if (existingUser != null)
             return false;
+
+        user.Email = email;
+
+        // Never store the user's password directly.
+        user.Password = BCrypt.Net.BCrypt.HashPassword(
+            user.Password);
 
         await _database.AddUserAsync(user);
 
         return true;
     }
 
-    public async Task<User?> Login(string email, string password)
+    public async Task<User?> Login(
+        string email,
+        string password)
     {
+        await _database.InitializeAsync();
+
+        string normalizedEmail =
+            email.Trim().ToLowerInvariant();
+
         var user =
-            await _database.GetUserByEmailAsync(email);
+            await _database.GetUserByEmailAsync(
+                normalizedEmail);
 
         if (user == null)
             return null;
 
-        if (user.Password != password)
+        bool passwordCorrect =
+            BCrypt.Net.BCrypt.Verify(
+                password,
+                user.Password);
+
+        if (!passwordCorrect)
             return null;
 
         return user;
