@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
 <ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -5,51 +7,45 @@
     Title="Add Task">
 
     <ScrollView>
+
         <VerticalStackLayout
-        Padding="20"
-        Spacing="15">
+            Padding="20"
+            Spacing="15">
+
+            <Label
+                Text="Add New Task"
+                FontSize="28"
+                FontAttributes="Bold" />
 
             <Entry
-            Placeholder="Title"
-            Text="{Binding Title}" />
+                Placeholder="Task title"
+                Text="{Binding Title}" />
 
             <Editor
-            Placeholder="Description"
-            HeightRequest="120"
-            Text="{Binding Description}" />
+                Placeholder="Description"
+                HeightRequest="120"
+                Text="{Binding Description}" />
 
             <Picker
                 Title="Category"
                 ItemsSource="{Binding Categories}"
                 SelectedItem="{Binding Category}" />
-            
-            
 
             <Picker
                 Title="Priority"
                 ItemsSource="{Binding Priorities}"
-                SelectedItem="{Binding Priority}">
-
-                <Picker.Items>
-
-                    <x:String>Low</x:String>
-
-                    <x:String>Medium</x:String>
-
-                    <x:String>High</x:String>
-
-                </Picker.Items>
-
-            </Picker>
+                SelectedItem="{Binding Priority}" />
 
             <DatePicker
-            Date="{Binding DueDate}" />
+                Date="{Binding DueDate}" />
 
             <Button
-            Text="Save Task"
-            Command="{Binding SaveTaskCommand}" />
+                Text="Save Task"
+                HeightRequest="50"
+                Command="{Binding SaveTaskCommand}" />
 
         </VerticalStackLayout>
+
     </ScrollView>
 
 </ContentPage>

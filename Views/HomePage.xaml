@@ -8,92 +8,122 @@
 
     <Grid
         Padding="20"
-        RowDefinitions="Auto,Auto,Auto,Auto,*,Auto">
+        RowDefinitions="Auto,Auto,Auto,Auto,*,Auto"
+        RowSpacing="10">
 
-        <!-- Header -->
+        <!-- ========================= -->
+        <!-- DASHBOARD HEADER -->
+        <!-- ========================= -->
+
         <VerticalStackLayout
             Grid.Row="0"
             Spacing="15">
 
             <Label
-                Text="My Tasks"
+                Text="📋 Student Task Manager"
                 FontSize="30"
                 FontAttributes="Bold" />
 
-            <ProgressBar
-                Progress="{Binding CompletionProgress}"
-                HeightRequest="8"/>
-
             <Grid
-                ColumnDefinitions="*,*,*"
-                ColumnSpacing="10">
+                ColumnDefinitions="*,*"
+                RowDefinitions="Auto,Auto"
+                ColumnSpacing="12"
+                RowSpacing="12">
 
+                <!-- Total -->
                 <Frame
+                    Grid.Row="0"
                     Grid.Column="0"
-                    Padding="10"
-                    CornerRadius="10">
+                    Padding="15"
+                    CornerRadius="12">
 
                     <VerticalStackLayout>
+                        <Label
+                            Text="Total Tasks"
+                            FontAttributes="Bold" />
 
-                    <Label
-                        Text="Total"
-                        HorizontalOptions="Center"/>
-
-                    <Label
-                        Text="{Binding TotalTasks}"
-                        FontSize="24"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"/>
-
+                        <Label
+                            Text="{Binding TotalTasks}"
+                            FontSize="28" />
                     </VerticalStackLayout>
 
                 </Frame>
 
+                <!-- Completed -->
                 <Frame
+                    Grid.Row="0"
                     Grid.Column="1"
-                    Padding="10"
-                    CornerRadius="10">
+                    Padding="15"
+                    CornerRadius="12">
 
                     <VerticalStackLayout>
+                        <Label
+                            Text="Completed"
+                            FontAttributes="Bold" />
 
-                    <Label
-                        Text="Completed"
-                        HorizontalOptions="Center"/>
-
-                    <Label
-                        Text="{Binding CompletedTasks}"
-                        FontSize="24"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"/>
-
+                        <Label
+                            Text="{Binding CompletedTasks}"
+                            FontSize="28" />
                     </VerticalStackLayout>
 
                 </Frame>
 
+                <!-- Pending -->
                 <Frame
-                    Grid.Column="2"
-                    Padding="10"
-                    CornerRadius="10">
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Padding="15"
+                    CornerRadius="12">
 
                     <VerticalStackLayout>
+                        <Label
+                            Text="Pending"
+                            FontAttributes="Bold" />
 
-                    <Label
-                        Text="Pending"
-                        HorizontalOptions="Center"/>
+                        <Label
+                            Text="{Binding PendingTasks}"
+                            FontSize="28" />
+                    </VerticalStackLayout>
 
-                    <Label
-                        Text="{Binding PendingTasks}"
-                        FontSize="24"
-                        FontAttributes="Bold"
-                        HorizontalOptions="Center"/>
+                </Frame>
 
+                <!-- Overdue -->
+                <Frame
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Padding="15"
+                    CornerRadius="12">
+
+                    <VerticalStackLayout>
+                        <Label
+                            Text="Overdue"
+                            FontAttributes="Bold" />
+
+                        <Label
+                            Text="{Binding OverdueTasks}"
+                            FontSize="28" />
                     </VerticalStackLayout>
 
                 </Frame>
 
             </Grid>
 
+            <!-- Progress -->
+            <ProgressBar
+                Progress="{Binding CompletionProgress}"
+                HeightRequest="8" />
+
+            <Label
+                Text="{Binding HighPriorityTasks,
+                       StringFormat='High Priority Tasks: {0}'}"
+                FontAttributes="Bold" />
+
         </VerticalStackLayout>
+
+
+        <!-- ========================= -->
+        <!-- SEARCH -->
+        <!-- ========================= -->
 
         <SearchBar
             Grid.Row="1"
@@ -101,11 +131,20 @@
             Text="{Binding SearchText}" />
 
 
+        <!-- ========================= -->
+        <!-- CATEGORY -->
+        <!-- ========================= -->
+
         <Picker
             Grid.Row="2"
-            Title="Filter Category"
+            Title="Filter by Category"
             ItemsSource="{Binding Categories}"
             SelectedItem="{Binding SelectedCategory}" />
+
+
+        <!-- ========================= -->
+        <!-- SORT -->
+        <!-- ========================= -->
 
         <Picker
             Grid.Row="3"
@@ -113,13 +152,11 @@
             ItemsSource="{Binding SortOptions}"
             SelectedItem="{Binding SelectedSort}" />
 
-        <Picker
-            Grid.Row="2"
-            Title="Filter"
-            ItemsSource="{Binding FilterCategories}"
-            SelectedItem="{Binding SelectedCategory}" />
 
-        <!-- Task List -->
+        <!-- ========================= -->
+        <!-- TASK LIST -->
+        <!-- ========================= -->
+
         <Grid Grid.Row="4">
 
             <CollectionView
@@ -131,89 +168,146 @@
 
                     <DataTemplate>
 
-                        <Frame
-                            Margin="6"
-                            Padding="15"
-                            CornerRadius="12"
-                            HasShadow="True"
-                            BorderColor="LightGray">
+                        <SwipeView>
 
-                            <VerticalStackLayout Spacing="8">
+                            <!-- COMPLETE -->
+                            <SwipeView.LeftItems>
 
-                            <Label
-                                Text="{Binding Title}"
-                                FontSize="20"
-                                FontAttributes="Bold"/>
+                                <SwipeItems>
 
-                            <Label
-                                Text="{Binding Description}"
-                                LineBreakMode="TailTruncation"/>
+                                    <SwipeItem
+                                        Text="Complete"
+                                        BackgroundColor="Green"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                          Path=BindingContext.CompleteTaskCommand}"
+                                        CommandParameter="{Binding .}" />
 
-                            <Label
-                                Text="{Binding HighPriorityTasks,
-                                StringFormat='High Priority: {0}'}"/>
+                                </SwipeItems>
 
-                            <Label
-                                Text="{Binding OverdueTasks,
-                                StringFormat='Overdue: {0}'}"/>
+                            </SwipeView.LeftItems>
 
-                                <HorizontalStackLayout
-                                    Spacing="10">
 
-                                                <Label
-                                    Text="{Binding PriorityDisplay}" />
+                            <!-- DELETE -->
+                            <SwipeView.RightItems>
 
-                                    <HorizontalStackLayout Spacing="12">
+                                <SwipeItems>
+
+                                    <SwipeItem
+                                        Text="Delete"
+                                        BackgroundColor="Red"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                          Path=BindingContext.DeleteTaskCommand}"
+                                        CommandParameter="{Binding .}" />
+
+                                </SwipeItems>
+
+                            </SwipeView.RightItems>
+
+
+                            <!-- TASK CARD -->
+
+                            <Frame
+                                Margin="6"
+                                Padding="15"
+                                CornerRadius="12"
+                                HasShadow="True"
+                                BorderColor="LightGray">
+
+                                <VerticalStackLayout
+                                    Spacing="8">
+
+                                    <!-- Title -->
+                                    <Label
+                                        Text="{Binding Title}"
+                                        FontSize="20"
+                                        FontAttributes="Bold" />
+
+                                    <!-- Description -->
+                                    <Label
+                                        Text="{Binding Description}"
+                                        LineBreakMode="TailTruncation" />
+
+                                    <!-- Category + Priority -->
+                                    <HorizontalStackLayout
+                                        Spacing="15">
 
                                         <Label
-                                        Text="{Binding Category}"
-                                        FontAttributes="Bold"/>
+                                            Text="{Binding Category}"
+                                            FontAttributes="Bold" />
 
-                                    <Label
-                                        Text="{Binding Priority}"
-                                        TextColor="{Binding PriorityColor}"
-                                        FontAttributes="Bold"/>
+                                        <Label
+                                            Text="{Binding PriorityDisplay}"
+                                            FontAttributes="Bold" />
 
                                     </HorizontalStackLayout>
 
-                                </HorizontalStackLayout>
+                                    <!-- Due Date -->
+                                    <Label
+                                        Text="{Binding DueDate,
+                                               StringFormat='Due: {0:dd MMM yyyy}'}" />
 
-                                <Label
-                                    Text="{Binding DueStatus}"
-                                    FontAttributes="Italic"/>
+                                    <!-- Due Status -->
+                                    <Label
+                                        Text="{Binding DueStatus}"
+                                        FontAttributes="Italic" />
 
-                                <Label
-                                Text="{Binding DueDate,
-                                       StringFormat='Due: {0:dd MMM yyyy}'}"/>
+                                    <!-- Completion Status -->
+                                    <Label
+                                        Text="{Binding StatusText}"
+                                        FontAttributes="Bold" />
 
-                            </VerticalStackLayout>
+                                </VerticalStackLayout>
 
-                        </Frame>
+                            </Frame>
 
-                            </DataTemplate>
+                        </SwipeView>
 
-                        </CollectionView.ItemTemplate>
+                    </DataTemplate>
 
-                    </CollectionView>
+                </CollectionView.ItemTemplate>
 
-                <Label
-                Text="No tasks yet. Tap 'Add Task' to create one."
+            </CollectionView>
+
+
+            <!-- EMPTY STATE -->
+
+            <VerticalStackLayout
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
-                FontSize="18"
-                TextColor="Gray"
-                IsVisible="{Binding IsTaskListEmpty}" />
+                Spacing="8"
+                IsVisible="{Binding IsTaskListEmpty}">
+
+                <Label
+                    Text="📝"
+                    FontSize="45"
+                    HorizontalOptions="Center" />
+
+                <Label
+                    Text="No tasks found"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center" />
+
+                <Label
+                    Text="Try changing your search or filters."
+                    TextColor="Gray"
+                    HorizontalOptions="Center" />
+
+            </VerticalStackLayout>
 
         </Grid>
 
-        <!-- Add Button -->
+
+        <!-- ========================= -->
+        <!-- ADD TASK -->
+        <!-- ========================= -->
+
         <Button
             Grid.Row="5"
-            Text="Add Task"
+            Text="+ Add Task"
+            HeightRequest="50"
             Command="{Binding AddTaskCommand}" />
 
     </Grid>
 
 </ContentPage>
-
-

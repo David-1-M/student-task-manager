@@ -24,10 +24,14 @@ public partial class AddTaskViewModel : ObservableObject
     [ObservableProperty]
     private string priority = "Medium";
 
+    private readonly NotificationService _notifications;
 
-    public AddTaskViewModel(DatabaseService database)
+    public AddTaskViewModel(
+    DatabaseService database,
+    NotificationService notifications)
     {
         _database = database;
+        _notifications = notifications;
     }
 
     [RelayCommand]
@@ -56,6 +60,12 @@ public partial class AddTaskViewModel : ObservableObject
         await _database.AddTaskAsync(task);
 
         await Shell.Current.GoToAsync("..");
+
+        await _notifications.ScheduleNotification(
+            task.Id,
+            task.Title,
+            "Task deadline approaching!",
+            task.DueDate.AddHours(-24));
     }
 
     public List<string> Categories { get; } =

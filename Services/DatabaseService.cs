@@ -19,17 +19,22 @@ public class DatabaseService
         _database = new SQLiteAsyncConnection(dbPath);
 
         await _database.CreateTableAsync<User>();
-        await _database.DropTableAsync<TaskItem>();
         await _database.CreateTableAsync<TaskItem>();
     }
 
-    public SQLiteAsyncConnection Database => _database!;
+    public SQLiteAsyncConnection Database =>
+        _database ?? throw new InvalidOperationException(
+            "Database has not been initialized.");
 
-    public async Task<User> GetUserAsync(string email)
+    // -------------------------
+    // USER OPERATIONS
+    // -------------------------
+
+    public async Task<User?> GetUserByEmailAsync(string email)
     {
         return await Database.Table<User>()
-                             .Where(x => x.Email == email)
-                             .FirstOrDefaultAsync();
+            .Where(x => x.Email == email)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<List<User>> GetUsersAsync()
@@ -39,40 +44,38 @@ public class DatabaseService
 
     public async Task<int> AddUserAsync(User user)
     {
-        return await _database.InsertAsync(user);
+        return await Database.InsertAsync(user);
     }
 
-    public async Task<User?> GetUserByEmailAsync(string email)
-    {
-        return await _database.Table<User>()
-                              .Where(x => x.Email == email)
-                              .FirstOrDefaultAsync();
-    }
+    // -------------------------
+    // TASK OPERATIONS
+    // -------------------------
 
     public async Task<List<TaskItem>> GetTasksAsync()
     {
-        return await Database.Table<TaskItem>().ToListAsync();
+        return await Database.Table<TaskItem>()
+            .ToListAsync();
     }
 
-    public async Task AddTaskAsync(TaskItem task)
+    public async Task<int> AddTaskAsync(TaskItem task)
     {
-        await Database.InsertAsync(task);
+        return await Database.InsertAsync(task);
     }
 
-    public async Task UpdateTaskAsync(TaskItem task)
+    public async Task<int> UpdateTaskAsync(TaskItem task)
     {
-        await Database.UpdateAsync(task);
+        return await Database.UpdateAsync(task);
     }
 
     public async Task<TaskItem?> GetTaskByIdAsync(int id)
     {
         return await Database.Table<TaskItem>()
-                             .Where(t => t.Id == id)
-                             .FirstOrDefaultAsync();
+            .Where(t => t.Id == id)
+            .FirstOrDefaultAsync();
     }
-    
-    public async Task DeleteTaskAsync(TaskItem task)
+
+    public async Task<int> DeleteTaskAsync(TaskItem task)
     {
-        await Database.DeleteAsync(task);
+        return await Database.DeleteAsync(task);
     }
 }

@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using StudentTaskManager.Models;
 using StudentTaskManager.Services;
 
-
 namespace StudentTaskManager.ViewModels;
 
 public partial class EditTaskViewModel : ObservableObject
@@ -13,13 +12,16 @@ public partial class EditTaskViewModel : ObservableObject
     private TaskItem? _task;
 
     [ObservableProperty]
-    private string title = "";
+    private string title = string.Empty;
 
     [ObservableProperty]
-    private string description = "";
+    private string description = string.Empty;
 
     [ObservableProperty]
     private string category = "School";
+
+    [ObservableProperty]
+    private string priority = "Medium";
 
     [ObservableProperty]
     private DateTime dueDate = DateTime.Today;
@@ -32,11 +34,31 @@ public partial class EditTaskViewModel : ObservableObject
         _database = database;
     }
 
+    public List<string> Categories { get; } =
+    [
+        "School",
+        "Work",
+        "Assignments",
+        "Projects",
+        "Tests",
+        "Meetings",
+        "Personal",
+        "Shopping",
+        "Health",
+        "Finance",
+        "Other"
+    ];
+
+    public List<string> Priorities { get; } =
+    [
+        "High",
+        "Medium",
+        "Low"
+    ];
+
     [RelayCommand]
     private async Task LoadTask(int id)
     {
-        _task.IsCompleted = isCompleted;
-
         _task = await _database.GetTaskByIdAsync(id);
 
         if (_task == null)
@@ -45,7 +67,7 @@ public partial class EditTaskViewModel : ObservableObject
         Title = _task.Title;
         Description = _task.Description;
         Category = _task.Category;
-        priority = _task.Priority;
+        Priority = _task.Priority;
         DueDate = _task.DueDate;
         IsCompleted = _task.IsCompleted;
     }
@@ -56,12 +78,21 @@ public partial class EditTaskViewModel : ObservableObject
         if (_task == null)
             return;
 
-        _task.Title = Title;
-        _task.Description = Description;
-        _task.Category = Category;
-        _task.DueDate = DueDate;
-        _task.Priority = priority;
+        if (string.IsNullOrWhiteSpace(Title))
+        {
+            await Shell.Current.DisplayAlert(
+                "Error",
+                "Task title is required.",
+                "OK");
 
+            return;
+        }
+
+        _task.Title = Title.Trim();
+        _task.Description = Description.Trim();
+        _task.Category = Category;
+        _task.Priority = Priority;
+        _task.DueDate = DueDate;
         _task.IsCompleted = IsCompleted;
 
         await _database.UpdateTaskAsync(_task);
@@ -77,7 +108,7 @@ public partial class EditTaskViewModel : ObservableObject
 
         bool answer = await Shell.Current.DisplayAlert(
             "Delete Task",
-            "Are you sure you want to delete this task?",
+            $"Are you sure you want to delete '{_task.Title}'?",
             "Yes",
             "No");
 
@@ -88,27 +119,4 @@ public partial class EditTaskViewModel : ObservableObject
 
         await Shell.Current.GoToAsync("..");
     }
-
-    [ObservableProperty]
-    private string priority = "Medium";
-
-    public List<string> Priorities { get; } =
-    new()
-    {
-    "High",
-    "Medium",
-    "Low"
-    };
-
-    public List<string> Categories { get; } =
-    new()
-    {
-        "School",
-        "Work",
-        "Personal",
-        "Shopping",
-        "Health",
-        "Finance",
-        "Other"
-    };
 }

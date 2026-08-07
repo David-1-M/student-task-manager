@@ -2,6 +2,7 @@
 using StudentTaskManager.Services;
 using StudentTaskManager.ViewModels;
 using StudentTaskManager.Views;
+using Plugin.LocalNotification;
 
 namespace StudentTaskManager;
 
@@ -37,6 +38,8 @@ public static class MauiProgram
         builder.Services.AddTransient<AddTaskPage>();
         builder.Services.AddTransient<EditTaskPage>();
         builder.Services.AddSingleton<HomeViewModel>();
+
+        builder.Services.AddSingleton<NotificationService>();
 
         return builder.Build();
     }

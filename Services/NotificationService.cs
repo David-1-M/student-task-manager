@@ -1,12 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Plugin.LocalNotification;
 
-namespace StudentTaskManager.Services
+namespace StudentTaskManager.Services;
+
+public class NotificationService
 {
-    class NotificationService
+    public async Task ScheduleNotification(
+        int id,
+        string title,
+        string description,
+        DateTime notifyTime)
     {
+        var request = new NotificationRequest
+        {
+            NotificationId = id,
+            Title = title,
+            Description = description,
+            Schedule = new NotificationRequestSchedule
+            {
+                NotifyTime = notifyTime
+            }
+        };
+
+        await LocalNotificationCenter.Current.Show(request);
     }
 }

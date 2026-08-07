@@ -12,8 +12,13 @@
             Padding="20"
             Spacing="15">
 
+            <Label
+                Text="Edit Task"
+                FontSize="28"
+                FontAttributes="Bold" />
+
             <Entry
-                Placeholder="Title"
+                Placeholder="Task title"
                 Text="{Binding Title}" />
 
             <Editor
@@ -26,37 +31,34 @@
                 ItemsSource="{Binding Categories}"
                 SelectedItem="{Binding Category}" />
 
+            <Picker
+                Title="Priority"
+                ItemsSource="{Binding Priorities}"
+                SelectedItem="{Binding Priority}" />
+
             <DatePicker
                 Date="{Binding DueDate}" />
 
-            <HorizontalStackLayout>
+            <HorizontalStackLayout
+                Spacing="10">
 
                 <CheckBox
                     IsChecked="{Binding IsCompleted}" />
 
                 <Label
-                    VerticalOptions="Center"
-                    Text="Completed" />
-
-            </HorizontalStackLayout>
-
-            <HorizontalStackLayout>
-
-                <CheckBox
-                    IsChecked="{Binding IsCompleted}" />
-
-                <Label
-                    VerticalOptions="Center"
-                    Text="Completed"/>
+                    Text="Mark as completed"
+                    VerticalOptions="Center" />
 
             </HorizontalStackLayout>
 
             <Button
                 Text="Save Changes"
+                HeightRequest="50"
                 Command="{Binding SaveCommand}" />
 
             <Button
                 Text="Delete Task"
+                HeightRequest="50"
                 BackgroundColor="Red"
                 TextColor="White"
                 Command="{Binding DeleteCommand}" />
