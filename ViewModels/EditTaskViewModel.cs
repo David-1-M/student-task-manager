@@ -45,8 +45,9 @@ public partial class EditTaskViewModel : ObservableObject
         Title = _task.Title;
         Description = _task.Description;
         Category = _task.Category;
+        priority = _task.Priority;
         DueDate = _task.DueDate;
-        isCompleted = _task.IsCompleted;
+        IsCompleted = _task.IsCompleted;
     }
 
     [RelayCommand]
@@ -59,6 +60,9 @@ public partial class EditTaskViewModel : ObservableObject
         _task.Description = Description;
         _task.Category = Category;
         _task.DueDate = DueDate;
+        _task.Priority = priority;
+
+        _task.IsCompleted = IsCompleted;
 
         await _database.UpdateTaskAsync(_task);
 
@@ -84,4 +88,15 @@ public partial class EditTaskViewModel : ObservableObject
 
         await Shell.Current.GoToAsync("..");
     }
+
+    [ObservableProperty]
+    private string priority = "Medium";
+
+    public List<string> Priorities { get; } =
+    new()
+    {
+    "High",
+    "Medium",
+    "Low"
+    };
 }

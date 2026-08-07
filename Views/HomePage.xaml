@@ -8,7 +8,7 @@
 
     <Grid
         Padding="20"
-        RowDefinitions="Auto,Auto,Auto,*,Auto">
+        RowDefinitions="Auto,Auto,Auto,Auto,*,Auto">
 
         <!-- Header -->
         <VerticalStackLayout
@@ -102,71 +102,99 @@
             ItemsSource="{Binding Categories}"
             SelectedItem="{Binding SelectedCategory}" />
 
-        <!-- Task List -->
-        <CollectionView
+        <Picker
             Grid.Row="3"
-            ItemsSource="{Binding Tasks}"
-            SelectionMode="Single"
-            SelectedItem="{Binding SelectedTask}">
-            
-            
+            Title="Sort By"
+            ItemsSource="{Binding SortOptions}"
+            SelectedItem="{Binding SelectedSort}" />
 
-            <CollectionView.ItemTemplate>
+        <!-- Task List -->
+        <Grid Grid.Row="4">
 
-                <DataTemplate>
+            <CollectionView
+                ItemsSource="{Binding Tasks}"
+                SelectionMode="Single"
+                SelectedItem="{Binding SelectedTask}">
 
-                    <Frame
-                        Margin="6"
-                        Padding="15"
-                        CornerRadius="12"
-                        HasShadow="True"
-                        BorderColor="LightGray">
+                <CollectionView.ItemTemplate>
 
-                        <VerticalStackLayout Spacing="8">
+                    <DataTemplate>
 
-                        <Label
-                            Text="{Binding Title}"
-                            FontSize="20"
-                            FontAttributes="Bold"/>
+                        <Frame
+                            Margin="6"
+                            Padding="15"
+                            CornerRadius="12"
+                            HasShadow="True"
+                            BorderColor="LightGray">
 
-                        <Label
-                            Text="{Binding Description}"
-                            LineBreakMode="TailTruncation"/>
+                            <VerticalStackLayout Spacing="8">
+
+                            <Label
+                                Text="{Binding Title}"
+                                FontSize="20"
+                                FontAttributes="Bold"/>
+
+                            <Label
+                                Text="{Binding Description}"
+                                LineBreakMode="TailTruncation"/>
 
                             <HorizontalStackLayout
-                                Spacing="10">
+                                    Spacing="10">
+
+                                                <Label
+                                    Text="{Binding PriorityDisplay}" />
+
+                                    <HorizontalStackLayout Spacing="12">
+
+                                        <Label
+                                        Text="{Binding Category}"
+                                        FontAttributes="Bold"/>
+
+                                    <Label
+                                        Text="{Binding Priority}"
+                                        TextColor="{Binding PriorityColor}"
+                                        FontAttributes="Bold"/>
+
+                                    </HorizontalStackLayout>
+
+                                </HorizontalStackLayout>
 
                                 <Label
-                                Text="{Binding PriorityDisplay}" />
+                                    Text="{Binding DueStatus}"
+                                    FontAttributes="Italic"/>
 
                                 <Label
-                                Text="{Binding Category}" />
+                                Text="{Binding DueDate,
+                                       StringFormat='Due: {0:dd MMM yyyy}'}"/>
 
-                            </HorizontalStackLayout>
+                            </VerticalStackLayout>
 
-                        <Label
-                            Text="{Binding DueStatus}" />
+                        </Frame>
 
-                        <Label
-                            Text="{Binding DueDate,
-                                   StringFormat='Due: {0:dd MMM yyyy}'}"/>
+                            </DataTemplate>
 
-                        </VerticalStackLayout>
+                        </CollectionView.ItemTemplate>
 
-                    </Frame>
+                    </CollectionView>
 
-                </DataTemplate>
+                <Label
+                Text="No tasks yet. Tap 'Add Task' to create one."
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                FontSize="18"
+                TextColor="Gray"
+                IsVisible="{Binding IsTaskListEmpty}" />
 
-            </CollectionView.ItemTemplate>
-
-        </CollectionView>
+        </Grid>
 
         <!-- Add Button -->
         <Button
-            Grid.Row="4"
+            Grid.Row="5"
             Text="Add Task"
             Command="{Binding AddTaskCommand}" />
 
     </Grid>
 
 </ContentPage>
+
+

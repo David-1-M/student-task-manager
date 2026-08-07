@@ -19,6 +19,7 @@ public class DatabaseService
         _database = new SQLiteAsyncConnection(dbPath);
 
         await _database.CreateTableAsync<User>();
+        await _database.DropTableAsync<TaskItem>();
         await _database.CreateTableAsync<TaskItem>();
     }
 

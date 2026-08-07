@@ -35,6 +35,17 @@
 
                 <Label
                     VerticalOptions="Center"
+                    Text="Completed" />
+
+            </HorizontalStackLayout>
+
+            <HorizontalStackLayout>
+
+                <CheckBox
+                    IsChecked="{Binding IsCompleted}" />
+
+                <Label
+                    VerticalOptions="Center"
                     Text="Completed"/>
 
             </HorizontalStackLayout>

@@ -32,12 +32,34 @@ public class TaskItem
     };
 
     public bool IsOverdue =>
-    !IsCompleted && DueDate.Date < DateTime.Today;
+    !IsCompleted &&
+    DueDate.Date < DateTime.Today;
 
-    public string DueStatus =>
-    IsCompleted
-        ? "✅ Completed"
-        : IsOverdue
-            ? "⚠️ Overdue"
-            : "📅 Upcoming";
+    public string DueStatus
+    {
+        get
+        {
+            if (IsCompleted)
+                return "✅ Completed";
+
+            if (IsOverdue)
+                return "⚠ Overdue";
+
+            return "📅 Upcoming";
+        }
+    }
+
+    public Color PriorityColor
+    {
+        get
+        {
+            return Priority switch
+            {
+                "High" => Colors.Red,
+                "Medium" => Colors.Orange,
+                _ => Colors.Green
+            };
+        }
+    }
+
 }

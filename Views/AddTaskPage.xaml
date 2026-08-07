@@ -22,9 +22,12 @@
                 Title="Category"
                 ItemsSource="{Binding Categories}"
                 SelectedItem="{Binding Category}" />
+            
+            
 
             <Picker
                 Title="Priority"
+                ItemsSource="{Binding Priorities}"
                 SelectedItem="{Binding Priority}">
 
                 <Picker.Items>

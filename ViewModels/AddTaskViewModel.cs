@@ -48,6 +48,7 @@ public partial class AddTaskViewModel : ObservableObject
             Description = Description,
             Category = Category,
             DueDate = DueDate,
+            Priority = Priority,
             IsCompleted = false
         };
 
@@ -67,4 +68,11 @@ public partial class AddTaskViewModel : ObservableObject
         "Other"
     };
 
+    public List<string> Priorities { get; } =
+    new()
+    {
+        "High",
+        "Medium",
+        "Low"
+    };
 }

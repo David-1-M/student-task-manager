@@ -42,10 +42,14 @@ public partial class HomeViewModel : ObservableObject
     [ObservableProperty]
     private int pendingTasks;
 
+    [ObservableProperty]
+    private string selectedSort = "Due Date";
+
     public HomeViewModel(DatabaseService database)
     {
         _database = database;
     }
+
 
     [RelayCommand]
     private async Task LoadTasks()
@@ -78,6 +82,11 @@ public partial class HomeViewModel : ObservableObject
         CompletedTasks = Tasks.Count(t => t.IsCompleted);
         PendingTasks = Tasks.Count(t => !t.IsCompleted);
         OnPropertyChanged(nameof(IsTaskListEmpty));
+
+        OnPropertyChanged(nameof(TotalTasks));
+        OnPropertyChanged(nameof(CompletedTasks));
+        OnPropertyChanged(nameof(PendingTasks));
+        OnPropertyChanged(nameof(IsTaskListEmpty));
     }
 
     partial void OnSearchTextChanged(string value)
@@ -107,4 +116,12 @@ public partial class HomeViewModel : ObservableObject
     }
 
     public bool IsTaskListEmpty => Tasks.Count == 0;
+
+    public List<string> SortOptions { get; } =
+    new()
+    {
+        "Due Date",
+        "Priority",
+        "Title"
+    };
 }
