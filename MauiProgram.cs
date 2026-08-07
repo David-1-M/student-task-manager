@@ -39,7 +39,7 @@ public static class MauiProgram
         builder.Services.AddTransient<EditTaskPage>();
         builder.Services.AddSingleton<HomeViewModel>();
 
-        builder.Services.AddSingleton<NotificationService>();
+        //builder.Services.AddSingleton<NotificationService>();
 
         return builder.Build();
     }

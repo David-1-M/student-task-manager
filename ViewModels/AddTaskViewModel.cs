@@ -16,22 +16,34 @@ public partial class AddTaskViewModel : ObservableObject
     private string description = string.Empty;
 
     [ObservableProperty]
-    private string category = "School";
-
-    [ObservableProperty]
-    private DateTime dueDate = DateTime.Today;
+    private string category = string.Empty;
 
     [ObservableProperty]
     private string priority = "Medium";
 
-    private readonly NotificationService _notifications;
+    [ObservableProperty]
+    private DateTime dueDate = DateTime.Today;
 
-    public AddTaskViewModel(
-    DatabaseService database,
-    NotificationService notifications)
+    public List<string> Categories { get; } = new()
+    {
+        "Assignments",
+        "Projects",
+        "Tests",
+        "Exams",
+        "Personal",
+        "Other"
+    };
+
+    public List<string> Priorities { get; } = new()
+    {
+        "Low",
+        "Medium",
+        "High"
+    };
+
+    public AddTaskViewModel(DatabaseService database)
     {
         _database = database;
-        _notifications = notifications;
     }
 
     [RelayCommand]
@@ -40,55 +52,35 @@ public partial class AddTaskViewModel : ObservableObject
         if (string.IsNullOrWhiteSpace(Title))
         {
             await Shell.Current.DisplayAlert(
-                "Error",
-                "Task title is required.",
+                "Missing Title",
+                "Please enter a task title.",
                 "OK");
 
             return;
         }
 
+        if (string.IsNullOrWhiteSpace(Category))
+        {
+            Category = "Other";
+        }
+
         var task = new TaskItem
         {
-            Title = Title,
-            Description = Description,
+            Title = Title.Trim(),
+            Description = Description?.Trim() ?? string.Empty,
             Category = Category,
-            DueDate = DueDate,
             Priority = Priority,
+            DueDate = DueDate,
             IsCompleted = false
         };
 
         await _database.AddTaskAsync(task);
 
+        await Shell.Current.DisplayAlert(
+            "Task Added",
+            "Your task has been added successfully.",
+            "OK");
+
         await Shell.Current.GoToAsync("..");
-
-        await _notifications.ScheduleNotification(
-            task.Id,
-            task.Title,
-            "Task deadline approaching!",
-            task.DueDate.AddHours(-24));
     }
-
-    public List<string> Categories { get; } =
-    new()
-    {
-        "School",
-        "Work",
-        "Assignments",
-        "Projects",
-        "Tests",
-        "Meetings",
-        "Personal",
-        "Shopping",
-        "Health",
-        "Finance",
-        "Other"
-    };
-
-    public List<string> Priorities { get; } =
-    new()
-    {
-        "High",
-        "Medium",
-        "Low"
-    };
 }
