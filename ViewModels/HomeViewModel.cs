@@ -77,6 +77,7 @@ public partial class HomeViewModel : ObservableObject
         TotalTasks = Tasks.Count;
         CompletedTasks = Tasks.Count(t => t.IsCompleted);
         PendingTasks = Tasks.Count(t => !t.IsCompleted);
+        OnPropertyChanged(nameof(IsTaskListEmpty));
     }
 
     partial void OnSearchTextChanged(string value)
@@ -104,4 +105,6 @@ public partial class HomeViewModel : ObservableObject
     {
         await Shell.Current.GoToAsync(nameof(AddTaskPage));
     }
+
+    public bool IsTaskListEmpty => Tasks.Count == 0;
 }
