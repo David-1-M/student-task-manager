@@ -154,6 +154,40 @@ The application follows a structured architecture separating the user interface,
 
 
 
+\## Screenshots
+
+
+
+\### Login
+
+!\[Login](Screenshots/login.png)
+
+
+
+\### Dashboard
+
+!\[Dashboard](Screenshots/home-empty.png)
+
+
+
+\### Add Task
+
+!\[Add Task](Screenshots/add-task.png)
+
+
+
+\### Settings
+
+!\[Settings](Screenshots/settings.png)
+
+
+
+\### Dashboard with Task
+
+!\[Dashboard with Task](Screenshots/home-task.png)
+
+
+
 ```text
 
 StudentTaskManager
