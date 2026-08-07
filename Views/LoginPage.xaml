@@ -13,44 +13,68 @@
             Spacing="20"
             VerticalOptions="Center">
 
-            <Label
-                Text="📚"
-                FontSize="70"
-                HorizontalOptions="Center" />
+            <!-- App Branding -->
+            <VerticalStackLayout
+                Spacing="5"
+                HorizontalOptions="Center">
 
-            <Label
-                Text="Student Task Manager"
-                FontSize="28"
-                FontAttributes="Bold"
-                HorizontalOptions="Center" />
+                <Label
+                    Text="📋"
+                    FontSize="60"
+                    HorizontalOptions="Center"/>
 
-            <Label
-                Text="Welcome back!"
-                FontSize="16"
-                HorizontalOptions="Center"
-                TextColor="Gray" />
+                <Label
+                    Text="Student Task Manager"
+                    FontSize="28"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"/>
 
-            <Entry
-                Placeholder="Email"
-                Keyboard="Email"
-                Text="{Binding Email}" />
+                <Label
+                    Text="Stay organised. Stay productive."
+                    FontSize="14"
+                    TextColor="Gray"
+                    HorizontalTextAlignment="Center"/>
 
-            <Entry
-                Placeholder="Password"
-                IsPassword="True"
-                Text="{Binding Password}" />
+            </VerticalStackLayout>
 
-            <Button
-                Text="Login"
-                HeightRequest="50"
-                CornerRadius="10"
-                Command="{Binding LoginCommand}" />
+            <!-- Login Form -->
+            <VerticalStackLayout
+                Spacing="15">
 
-            <Button
-                Text="Create Account"
-                HeightRequest="50"
-                CornerRadius="10"
-                Command="{Binding RegisterCommand}" />
+                <Entry
+                    Placeholder="Email"
+                    Keyboard="Email"
+                    Text="{Binding Email}"/>
+
+                <Entry
+                    Placeholder="Password"
+                    IsPassword="True"
+                    Text="{Binding Password}"/>
+
+                <Button
+                    Text="Login"
+                    HeightRequest="50"
+                    Command="{Binding LoginCommand}"/>
+
+            </VerticalStackLayout>
+
+            <!-- Register -->
+            <VerticalStackLayout
+                Spacing="8"
+                HorizontalOptions="Center">
+
+                <Label
+                    Text="Don't have an account?"
+                    HorizontalTextAlignment="Center"
+                    TextColor="Gray"/>
+
+                <Button
+                    Text="Create Account"
+                    BackgroundColor="Transparent"
+                    TextColor="#512BD4"
+                    Command="{Binding RegisterCommand}"/>
+
+            </VerticalStackLayout>
 
         </VerticalStackLayout>
 

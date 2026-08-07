@@ -70,6 +70,12 @@ public partial class HomeViewModel : ObservableObject
             ? 0
             : (double)CompletedTasks / TotalTasks;
 
+    [RelayCommand]
+    private async Task OpenSettings()
+    {
+        await Shell.Current.GoToAsync(nameof(SettingsPage));
+    }
+
     public HomeViewModel(DatabaseService database)
     {
         _database = database;
@@ -82,6 +88,15 @@ public partial class HomeViewModel : ObservableObject
     [RelayCommand]
     private async Task LoadTasks()
     {
+        Tasks.Clear();
+
+        var tasks = await _database.GetTasksAsync();
+
+        foreach (var task in tasks)
+            Tasks.Add(task);
+
+        OnPropertyChanged(nameof(IsTaskListEmpty));
+
         await RefreshTasks();
     }
 
@@ -150,7 +165,7 @@ public partial class HomeViewModel : ObservableObject
                 .OrderBy(t => t.IsCompleted)
                 .ThenBy(t => t.DueDate)
         };
-
+        
         Tasks.Clear();
 
         foreach (var task in filtered)

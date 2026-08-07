@@ -4,7 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="StudentTaskManager.Views.HomePage"
-    Title="My Tasks">
+    Title="Student Task Manager">
 
     <Grid
         Padding="20"
@@ -157,12 +157,13 @@
         <!-- TASK LIST -->
         <!-- ========================= -->
 
+        <!-- Task List -->
         <Grid Grid.Row="4">
 
             <CollectionView
-                ItemsSource="{Binding Tasks}"
-                SelectionMode="Single"
-                SelectedItem="{Binding SelectedTask}">
+        ItemsSource="{Binding Tasks}"
+        SelectionMode="Single"
+        SelectedItem="{Binding SelectedTask}">
 
                 <CollectionView.ItemTemplate>
 
@@ -170,91 +171,80 @@
 
                         <SwipeView>
 
-                            <!-- COMPLETE -->
                             <SwipeView.LeftItems>
 
                                 <SwipeItems>
 
                                     <SwipeItem
-                                        Text="Complete"
-                                        BackgroundColor="Green"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
-                                                          Path=BindingContext.CompleteTaskCommand}"
-                                        CommandParameter="{Binding .}" />
+                                Text="Complete"
+                                BackgroundColor="Green"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                  Path=BindingContext.CompleteTaskCommand}"
+                                CommandParameter="{Binding .}" />
 
                                 </SwipeItems>
 
                             </SwipeView.LeftItems>
 
-
-                            <!-- DELETE -->
                             <SwipeView.RightItems>
 
                                 <SwipeItems>
 
                                     <SwipeItem
-                                        Text="Delete"
-                                        BackgroundColor="Red"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
-                                                          Path=BindingContext.DeleteTaskCommand}"
-                                        CommandParameter="{Binding .}" />
+                                Text="Delete"
+                                BackgroundColor="Red"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                  Path=BindingContext.DeleteTaskCommand}"
+                                CommandParameter="{Binding .}" />
 
                                 </SwipeItems>
 
                             </SwipeView.RightItems>
 
-
-                            <!-- TASK CARD -->
-
                             <Frame
-                                Margin="6"
-                                Padding="15"
-                                CornerRadius="12"
-                                HasShadow="True"
-                                BorderColor="LightGray">
+                        Margin="6"
+                        Padding="15"
+                        CornerRadius="12"
+                        HasShadow="True"
+                        BorderColor="LightGray">
 
                                 <VerticalStackLayout
-                                    Spacing="8">
+                            Spacing="8">
 
-                                    <!-- Title -->
                                     <Label
-                                        Text="{Binding Title}"
-                                        FontSize="20"
-                                        FontAttributes="Bold" />
+                                Text="{Binding Title}"
+                                FontSize="20"
+                                FontAttributes="Bold"/>
 
-                                    <!-- Description -->
                                     <Label
-                                        Text="{Binding Description}"
-                                        LineBreakMode="TailTruncation" />
+                                Text="{Binding Description}"
+                                LineBreakMode="TailTruncation"/>
 
-                                    <!-- Category + Priority -->
                                     <HorizontalStackLayout
-                                        Spacing="15">
+                                Spacing="12">
 
                                         <Label
-                                            Text="{Binding Category}"
-                                            FontAttributes="Bold" />
+                                    Text="{Binding Category}"
+                                    FontAttributes="Bold"/>
 
                                         <Label
-                                            Text="{Binding PriorityDisplay}"
-                                            FontAttributes="Bold" />
+                                    Text="{Binding Priority}"
+                                    TextColor="{Binding PriorityColor}"
+                                    FontAttributes="Bold"/>
 
                                     </HorizontalStackLayout>
 
-                                    <!-- Due Date -->
                                     <Label
-                                        Text="{Binding DueDate,
-                                               StringFormat='Due: {0:dd MMM yyyy}'}" />
+                                Text="{Binding DueDate,
+                                       StringFormat='Due: {0:dd MMM yyyy}'}"/>
 
-                                    <!-- Due Status -->
                                     <Label
-                                        Text="{Binding DueStatus}"
-                                        FontAttributes="Italic" />
+                                Text="{Binding DueStatus}"
+                                FontAttributes="Italic"/>
 
-                                    <!-- Completion Status -->
                                     <Label
-                                        Text="{Binding StatusText}"
-                                        FontAttributes="Bold" />
+                                Text="{Binding StatusText}"
+                                FontAttributes="Italic"/>
 
                                 </VerticalStackLayout>
 
@@ -268,30 +258,29 @@
 
             </CollectionView>
 
-
-            <!-- EMPTY STATE -->
-
+            <!-- Empty State -->
             <VerticalStackLayout
-                HorizontalOptions="Center"
-                VerticalOptions="Center"
-                Spacing="8"
-                IsVisible="{Binding IsTaskListEmpty}">
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        Spacing="10"
+        IsVisible="{Binding IsTaskListEmpty}">
 
                 <Label
-                    Text="📝"
-                    FontSize="45"
-                    HorizontalOptions="Center" />
+            Text="📋"
+            FontSize="50"
+            HorizontalOptions="Center"/>
 
                 <Label
-                    Text="No tasks found"
-                    FontSize="20"
-                    FontAttributes="Bold"
-                    HorizontalOptions="Center" />
+            Text="No tasks yet"
+            FontSize="24"
+            FontAttributes="Bold"
+            HorizontalTextAlignment="Center"/>
 
                 <Label
-                    Text="Try changing your search or filters."
-                    TextColor="Gray"
-                    HorizontalOptions="Center" />
+            Text="Create your first task to get started."
+            FontSize="15"
+            TextColor="Gray"
+            HorizontalTextAlignment="Center"/>
 
             </VerticalStackLayout>
 
@@ -302,11 +291,22 @@
         <!-- ADD TASK -->
         <!-- ========================= -->
 
-        <Button
+        <HorizontalStackLayout
             Grid.Row="5"
-            Text="+ Add Task"
-            HeightRequest="50"
+            HorizontalOptions="Fill"
+            Spacing="10">
+
+        <Button
+            Text="Add Task"
+            HorizontalOptions="FillAndExpand"
             Command="{Binding AddTaskCommand}" />
+
+        <Button
+            Text="⚙️"
+            WidthRequest="60"
+            Command="{Binding OpenSettingsCommand}" />
+
+        </HorizontalStackLayout>
 
     </Grid>
 

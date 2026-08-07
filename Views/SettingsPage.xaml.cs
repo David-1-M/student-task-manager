@@ -1,9 +1,16 @@
+using StudentTaskManager.ViewModels;
+
 namespace StudentTaskManager.Views;
 
 public partial class SettingsPage : ContentPage
 {
-	public SettingsPage()
-	{
-		InitializeComponent();
-	}
+    private readonly SettingsViewModel _viewModel;
+
+    public SettingsPage(SettingsViewModel viewModel)
+    {
+        InitializeComponent();
+
+        _viewModel = viewModel;
+        BindingContext = viewModel;
+    }
 }

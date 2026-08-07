@@ -53,6 +53,11 @@ public partial class LoginViewModel : ObservableObject
         // Clear password after successful login
         Password = string.Empty;
 
+        // Store the logged-in user's information
+        Preferences.Set("LoggedInUserId", user.Id);
+        Preferences.Set("LoggedInUserName", user.FullName);
+        Preferences.Set("LoggedInUserEmail", user.Email);
+
         await Shell.Current.GoToAsync(
             nameof(HomePage));
     }

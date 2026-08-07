@@ -10,44 +10,54 @@
 
         <VerticalStackLayout
             Padding="30"
-            Spacing="18"
-            VerticalOptions="Center">
+            Spacing="18">
 
-            <Label
-                Text="👤"
-                FontSize="70"
-                HorizontalOptions="Center"/>
+            <VerticalStackLayout
+                Spacing="5"
+                HorizontalOptions="Center">
 
-            <Label
-                Text="Create Account"
-                FontSize="28"
-                FontAttributes="Bold"
-                HorizontalOptions="Center"/>
+                <Label
+                    Text="📋"
+                    FontSize="50"
+                    HorizontalOptions="Center"/>
+
+                <Label
+                    Text="Create Account"
+                    FontSize="28"
+                    FontAttributes="Bold"
+                    HorizontalTextAlignment="Center"/>
+
+                <Label
+                    Text="Start managing your tasks today."
+                    FontSize="14"
+                    TextColor="Gray"
+                    HorizontalTextAlignment="Center"/>
+
+            </VerticalStackLayout>
 
             <Entry
                 Placeholder="Full Name"
-                Text="{Binding FullName}" />
+                Text="{Binding FullName}"/>
 
             <Entry
                 Placeholder="Email"
                 Keyboard="Email"
-                Text="{Binding Email}" />
+                Text="{Binding Email}"/>
 
             <Entry
                 Placeholder="Password"
                 IsPassword="True"
-                Text="{Binding Password}" />
+                Text="{Binding Password}"/>
 
             <Entry
                 Placeholder="Confirm Password"
                 IsPassword="True"
-                Text="{Binding ConfirmPassword}" />
+                Text="{Binding ConfirmPassword}"/>
 
             <Button
                 Text="Register"
                 HeightRequest="50"
-                CornerRadius="10"
-                Command="{Binding RegisterCommand}" />
+                Command="{Binding RegisterCommand}"/>
 
         </VerticalStackLayout>
 

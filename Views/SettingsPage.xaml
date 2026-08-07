@@ -1,12 +1,83 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="StudentTaskManager.Views.SettingsPage"
-             Title="SettingsPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="StudentTaskManager.Views.SettingsPage"
+    Title="Settings">
+
+    <ScrollView>
+
+        <VerticalStackLayout
+            Padding="25"
+            Spacing="20">
+
+            <Label
+                Text="⚙️ Settings"
+                FontSize="30"
+                FontAttributes="Bold"/>
+
+            <!-- Account -->
+            <Frame
+                Padding="15"
+                CornerRadius="12"
+                BorderColor="LightGray">
+
+                <VerticalStackLayout
+                    Spacing="8">
+
+                    <Label
+                        Text="Account"
+                        FontSize="20"
+                        FontAttributes="Bold"/>
+
+                    <Label
+                        Text="{Binding UserName}"
+                        FontSize="16"/>
+
+                    <Label
+                        Text="{Binding UserEmail}"
+                        TextColor="Gray"/>
+
+                </VerticalStackLayout>
+
+            </Frame>
+
+            <!-- About -->
+            <Frame
+                Padding="15"
+                CornerRadius="12"
+                BorderColor="LightGray">
+
+                <VerticalStackLayout
+                    Spacing="8">
+
+                    <Label
+                        Text="About"
+                        FontSize="20"
+                        FontAttributes="Bold"/>
+
+                    <Label
+                        Text="Student Task Manager"/>
+
+                    <Label
+                        Text="Version 1.0"
+                        TextColor="Gray"/>
+
+                </VerticalStackLayout>
+
+            </Frame>
+
+            <!-- Logout -->
+            <Button
+                Text="Logout"
+                BackgroundColor="Red"
+                TextColor="White"
+                HeightRequest="50"
+                Command="{Binding LogoutCommand}"/>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
 </ContentPage>

@@ -21,7 +21,7 @@
 		<Nullable>enable</Nullable>
 
 		<!-- Display name -->
-		<ApplicationTitle>StudentTaskManager</ApplicationTitle>
+		<ApplicationTitle>Student Task Manager</ApplicationTitle>
 
 		<!-- App Identifier -->
 		<ApplicationId>com.companyname.studenttaskmanager</ApplicationId>
