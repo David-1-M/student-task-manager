@@ -108,7 +108,7 @@
             ItemsSource="{Binding Tasks}"
             SelectionMode="Single"
             SelectedItem="{Binding SelectedTask}">
-
+            
             
 
             <CollectionView.ItemTemplate>
