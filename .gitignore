@@ -22,3 +22,6 @@ obj/
 # Android signing key
 *.keystore
 *.jks
+
+# Release builds
+Releases/
