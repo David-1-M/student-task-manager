@@ -18,3 +18,7 @@ obj/
 
 # Logs
 *.log
+
+# Android signing key
+*.keystore
+*.jks
