@@ -7,6 +7,9 @@ public class TaskItem
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
 
+    // The user who owns this task
+    public int UserId { get; set; }
+
     public string Title { get; set; } = string.Empty;
 
     public string Description { get; set; } = string.Empty;
@@ -19,21 +22,20 @@ public class TaskItem
 
     public bool IsCompleted { get; set; }
 
-
     public string StatusText =>
-    IsCompleted ? "✅ Completed" : "⏳ Pending";
+        IsCompleted ? "✅ Completed" : "⏳ Pending";
 
     public string PriorityDisplay =>
-    Priority switch
-    {
-        "High" => "🔴 High",
-        "Medium" => "🟡 Medium",
-        _ => "🟢 Low"
-    };
+        Priority switch
+        {
+            "High" => "🔴 High",
+            "Medium" => "🟡 Medium",
+            _ => "🟢 Low"
+        };
 
     public bool IsOverdue =>
-    !IsCompleted &&
-    DueDate.Date < DateTime.Today;
+        !IsCompleted &&
+        DueDate.Date < DateTime.Today;
 
     public string DueStatus
     {
@@ -61,6 +63,4 @@ public class TaskItem
             };
         }
     }
-
-
 }

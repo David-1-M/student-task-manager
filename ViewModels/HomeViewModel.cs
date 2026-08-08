@@ -82,15 +82,42 @@ public partial class HomeViewModel : ObservableObject
     }
 
     // -------------------------
+    // CURRENT USER
+    // -------------------------
+
+    private int GetCurrentUserId()
+    {
+        return Preferences.Default.Get("LoggedInUserId", 0);
+    }
+
+    // -------------------------
     // LOAD TASKS
     // -------------------------
 
     [RelayCommand]
     private async Task LoadTasks()
     {
+        int userId = GetCurrentUserId();
+
+        if (userId == 0)
+        {
+            Tasks.Clear();
+
+            TotalTasks = 0;
+            CompletedTasks = 0;
+            PendingTasks = 0;
+            OverdueTasks = 0;
+            HighPriorityTasks = 0;
+
+            OnPropertyChanged(nameof(IsTaskListEmpty));
+            OnPropertyChanged(nameof(CompletionProgress));
+
+            return;
+        }
+
         Tasks.Clear();
 
-        var tasks = await _database.GetTasksAsync();
+        var tasks = await _database.GetTasksAsync(userId);
 
         foreach (var task in tasks)
             Tasks.Add(task);
@@ -106,10 +133,14 @@ public partial class HomeViewModel : ObservableObject
 
     private async Task RefreshTasks()
     {
-        var allTasks = await _database.GetTasksAsync();
+        int userId = GetCurrentUserId();
 
-        // Dashboard statistics use ALL tasks,
-        // not just the currently filtered list.
+        if (userId == 0)
+            return;
+
+        var allTasks = await _database.GetTasksAsync(userId);
+
+        // Dashboard statistics use this user's tasks only.
         TotalTasks = allTasks.Count;
 
         CompletedTasks =
@@ -127,7 +158,10 @@ public partial class HomeViewModel : ObservableObject
 
         IEnumerable<TaskItem> filtered = allTasks;
 
-        // Search
+        // -------------------------
+        // SEARCH
+        // -------------------------
+
         if (!string.IsNullOrWhiteSpace(SearchText))
         {
             filtered = filtered.Where(t =>
@@ -144,14 +178,20 @@ public partial class HomeViewModel : ObservableObject
                     StringComparison.OrdinalIgnoreCase));
         }
 
-        // Category
+        // -------------------------
+        // CATEGORY
+        // -------------------------
+
         if (SelectedCategory != "All")
         {
             filtered = filtered.Where(t =>
                 t.Category == SelectedCategory);
         }
 
-        // Sorting
+        // -------------------------
+        // SORTING
+        // -------------------------
+
         filtered = SelectedSort switch
         {
             "Priority" => filtered
@@ -165,7 +205,7 @@ public partial class HomeViewModel : ObservableObject
                 .OrderBy(t => t.IsCompleted)
                 .ThenBy(t => t.DueDate)
         };
-        
+
         Tasks.Clear();
 
         foreach (var task in filtered)
@@ -259,6 +299,16 @@ public partial class HomeViewModel : ObservableObject
         if (task.IsCompleted)
             return;
 
+        int userId = GetCurrentUserId();
+
+        if (userId == 0)
+            return;
+
+        // Security check: make sure the task belongs
+        // to the currently logged-in user.
+        if (task.UserId != userId)
+            return;
+
         task.IsCompleted = true;
 
         await _database.UpdateTaskAsync(task);
@@ -274,6 +324,16 @@ public partial class HomeViewModel : ObservableObject
     private async Task DeleteTask(TaskItem task)
     {
         if (task == null)
+            return;
+
+        int userId = GetCurrentUserId();
+
+        if (userId == 0)
+            return;
+
+        // Security check: make sure the task belongs
+        // to the currently logged-in user.
+        if (task.UserId != userId)
             return;
 
         bool answer = await Shell.Current.DisplayAlert(

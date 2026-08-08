@@ -6,6 +6,8 @@
     x:Class="StudentTaskManager.Views.HomePage"
     Title="Student Task Manager">
 
+    <ScrollView>
+        
     <Grid
         Padding="20"
         RowDefinitions="Auto,Auto,Auto,Auto,*,Auto"
@@ -18,11 +20,6 @@
         <VerticalStackLayout
             Grid.Row="0"
             Spacing="15">
-
-            <Label
-                Text="📋 Student Task Manager"
-                FontSize="30"
-                FontAttributes="Bold" />
 
             <Grid
                 ColumnDefinitions="*,*"
@@ -202,11 +199,11 @@
                             </SwipeView.RightItems>
 
                             <Frame
-                        Margin="6"
-                        Padding="15"
-                        CornerRadius="12"
-                        HasShadow="True"
-                        BorderColor="LightGray">
+                                Margin="6"
+                                Padding="15"
+                                CornerRadius="12"
+                                HasShadow="True"
+                                BorderColor="LightGray">
 
                                 <VerticalStackLayout
                             Spacing="8">
@@ -242,9 +239,9 @@
                                 Text="{Binding DueStatus}"
                                 FontAttributes="Italic"/>
 
-                                    <Label
-                                Text="{Binding StatusText}"
-                                FontAttributes="Italic"/>
+                                <Label
+                                    Text="{Binding StatusText}"
+                                    FontAttributes="Italic"/>
 
                                 </VerticalStackLayout>
 
@@ -309,5 +306,7 @@
         </HorizontalStackLayout>
 
     </Grid>
+
+   </ScrollView>
 
 </ContentPage>

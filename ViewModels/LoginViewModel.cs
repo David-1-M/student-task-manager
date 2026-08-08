@@ -8,6 +8,7 @@ namespace StudentTaskManager.ViewModels;
 public partial class LoginViewModel : ObservableObject
 {
     private readonly AuthenticationService _authentication;
+    private readonly DatabaseService _database;
 
     [ObservableProperty]
     private string email = string.Empty;
@@ -16,9 +17,11 @@ public partial class LoginViewModel : ObservableObject
     private string password = string.Empty;
 
     public LoginViewModel(
-        AuthenticationService authentication)
+        AuthenticationService authentication,
+        DatabaseService database)
     {
         _authentication = authentication;
+        _database = database;
     }
 
     [RelayCommand]
@@ -50,13 +53,15 @@ public partial class LoginViewModel : ObservableObject
             return;
         }
 
-        // Clear password after successful login
-        Password = string.Empty;
-
-        // Store the logged-in user's information
+        // Save logged in user
         Preferences.Set("LoggedInUserId", user.Id);
         Preferences.Set("LoggedInUserName", user.FullName);
         Preferences.Set("LoggedInUserEmail", user.Email);
+
+        // Claim legacy tasks created before multi-user support
+        await _database.AssignLegacyTasksToUserAsync(user.Id);
+
+        Password = string.Empty;
 
         await Shell.Current.GoToAsync(
             nameof(HomePage));

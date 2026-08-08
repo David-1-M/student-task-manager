@@ -13,7 +13,7 @@
             Spacing="15">
 
             <Label
-                Text="Edit Task"
+                Text="Edit Current Task"
                 FontSize="28"
                 FontAttributes="Bold" />
 
