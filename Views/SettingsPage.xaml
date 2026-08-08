@@ -68,6 +68,33 @@
 
             </Frame>
 
+            <!-- Notifications -->
+            <Frame
+                Padding="15"
+                CornerRadius="12"
+                BorderColor="LightGray">
+
+                <VerticalStackLayout
+                    Spacing="10">
+
+                    <Label
+                        Text="Notifications"
+                        FontSize="20"
+                        FontAttributes="Bold"/>
+
+                    <Label
+                        Text="Test whether task notifications are working on this device."
+                        TextColor="Gray"/>
+
+                    <Button
+                        Text="Test Notification"
+                        HeightRequest="50"
+                        Command="{Binding TestNotificationCommand}"/>
+
+                </VerticalStackLayout>
+
+            </Frame>
+
             <!-- Logout -->
             <Button
                 Text="Logout"
