@@ -36,8 +36,20 @@
                 ItemsSource="{Binding Priorities}"
                 SelectedItem="{Binding Priority}" />
 
+            <Label
+                Text="Due Date"
+                FontAttributes="Bold" />
+
             <DatePicker
                 Date="{Binding DueDate}" />
+
+            <Label
+                Text="Due Time"
+                FontAttributes="Bold" />
+
+            <TimePicker
+                Time="{Binding DueTime}"
+                Format="HH:mm" />
 
             <Button
                 Text="Save Task"

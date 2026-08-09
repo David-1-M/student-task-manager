@@ -15,6 +15,19 @@ public partial class SettingsViewModel : ObservableObject
     [ObservableProperty]
     private string userEmail = "Not available";
 
+    [ObservableProperty]
+    private string notificationPreference = "1 hour before";
+
+    public List<string> NotificationOptions { get; } =
+    [
+        "Notifications Off",
+        "15 minutes before",
+        "30 minutes before",
+        "1 hour before",
+        "1 day before",
+        "2 days before"
+    ];
+
     public SettingsViewModel(NotificationService notificationService)
     {
         _notificationService = notificationService;
@@ -31,31 +44,79 @@ public partial class SettingsViewModel : ObservableObject
         UserEmail = Preferences.Get(
             "LoggedInUserEmail",
             "Not available");
+
+        NotificationPreference = Preferences.Get(
+            GetNotificationPreferenceKey(),
+            "1 hour before");
     }
 
+    partial void OnNotificationPreferenceChanged(string value)
+    {
+        Preferences.Set(
+            GetNotificationPreferenceKey(),
+            value);
+
+        // Request notification permission when notifications are enabled.
+        if (value != "Notifications Off")
+        {
+            _ = RequestNotificationPermissionAsync();
+        }
+    }
+
+    private async Task RequestNotificationPermissionAsync()
+    {
+        bool permissionGranted =
+            await _notificationService.RequestPermissionAsync();
+
+        if (!permissionGranted)
+        {
+            await Shell.Current.DisplayAlert(
+                "Notifications Disabled",
+                "Please allow notifications for Student Task Manager in your phone's settings.",
+                "OK");
+        }
+    }
+
+    private static string GetNotificationPreferenceKey()
+    {
+        int userId = Preferences.Get(
+            "LoggedInUserId",
+            0);
+
+        return $"NotificationPreference_{userId}";
+    }
+
+    // -------------------------
     // TEST NOTIFICATION
+    // -------------------------
+
     [RelayCommand]
     private async Task TestNotification()
     {
-        bool enabled = await _notificationService.AreNotificationsEnabledAsync();
+        bool permissionGranted =
+            await _notificationService.RequestPermissionAsync();
 
-        if (!enabled)
+        if (!permissionGranted)
         {
-            bool granted = await _notificationService.RequestPermissionAsync();
+            await Shell.Current.DisplayAlert(
+                "Notifications Disabled",
+                "Please allow notifications for Student Task Manager in your device settings.",
+                "OK");
 
-            if (!granted)
-            {
-                await Shell.Current.DisplayAlert(
-                    "Notifications Disabled",
-                    "Please allow notifications for Student Task Manager in your phone's settings.",
-                    "OK");
-
-                return;
-            }
+            return;
         }
 
         await _notificationService.SendTestNotificationAsync();
+
+        await Shell.Current.DisplayAlert(
+            "Notification Sent",
+            "A test notification has been sent. Check your notification panel.",
+            "OK");
     }
+
+    // -------------------------
+    // LOGOUT
+    // -------------------------
 
     [RelayCommand]
     private async Task Logout()

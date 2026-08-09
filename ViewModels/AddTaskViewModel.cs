@@ -8,6 +8,7 @@ namespace StudentTaskManager.ViewModels;
 public partial class AddTaskViewModel : ObservableObject
 {
     private readonly DatabaseService _database;
+    private readonly NotificationService _notificationService;
 
     [ObservableProperty]
     private string title = string.Empty;
@@ -23,6 +24,9 @@ public partial class AddTaskViewModel : ObservableObject
 
     [ObservableProperty]
     private DateTime dueDate = DateTime.Today;
+
+    [ObservableProperty]
+    private TimeSpan dueTime = DateTime.Now.AddHours(1).TimeOfDay;
 
     public List<string> Categories { get; } = new()
     {
@@ -41,18 +45,18 @@ public partial class AddTaskViewModel : ObservableObject
         "High"
     };
 
-    public AddTaskViewModel(DatabaseService database)
+    public AddTaskViewModel(
+        DatabaseService database,
+        NotificationService notificationService)
     {
         _database = database;
+        _notificationService = notificationService;
     }
 
     [RelayCommand]
     private async Task SaveTask()
     {
-        // -------------------------
-        // VALIDATE USER
-        // -------------------------
-
+        // Validate logged-in user
         int userId = Preferences.Default.Get(
             "LoggedInUserId",
             0);
@@ -70,10 +74,7 @@ public partial class AddTaskViewModel : ObservableObject
             return;
         }
 
-        // -------------------------
-        // VALIDATE TITLE
-        // -------------------------
-
+        // Validate title
         if (string.IsNullOrWhiteSpace(Title))
         {
             await Shell.Current.DisplayAlert(
@@ -84,10 +85,7 @@ public partial class AddTaskViewModel : ObservableObject
             return;
         }
 
-        // -------------------------
-        // VALIDATE DESCRIPTION
-        // -------------------------
-
+        // Validate description
         if (string.IsNullOrWhiteSpace(Description))
         {
             await Shell.Current.DisplayAlert(
@@ -98,10 +96,7 @@ public partial class AddTaskViewModel : ObservableObject
             return;
         }
 
-        // -------------------------
-        // VALIDATE CATEGORY
-        // -------------------------
-
+        // Validate category
         if (string.IsNullOrWhiteSpace(Category))
         {
             await Shell.Current.DisplayAlert(
@@ -112,10 +107,7 @@ public partial class AddTaskViewModel : ObservableObject
             return;
         }
 
-        // -------------------------
-        // VALIDATE PRIORITY
-        // -------------------------
-
+        // Validate priority
         if (string.IsNullOrWhiteSpace(Priority))
         {
             await Shell.Current.DisplayAlert(
@@ -126,45 +118,33 @@ public partial class AddTaskViewModel : ObservableObject
             return;
         }
 
-        // -------------------------
-        // VALIDATE DATE
-        // -------------------------
+        // Combine date and time
+        DateTime dueDateTime = DueDate.Date.Add(DueTime);
 
-        if (DueDate.Date < DateTime.Today)
+        // Validate due date/time
+        if (dueDateTime <= DateTime.Now)
         {
             await Shell.Current.DisplayAlert(
                 "Invalid Due Date",
-                "The due date cannot be in the past.",
+                "Please select a future date and time.",
                 "OK");
 
             return;
         }
 
-        // -------------------------
-        // CREATE TASK
-        // -------------------------
-
+        // Create task
         var task = new TaskItem
         {
             UserId = userId,
-
             Title = Title.Trim(),
-
             Description = Description.Trim(),
-
             Category = Category,
-
             Priority = Priority,
-
-            DueDate = DueDate,
-
+            DueDate = dueDateTime,
             IsCompleted = false
         };
 
-        // -------------------------
-        // SAVE TASK
-        // -------------------------
-
+        // Save task
         int result = await _database.AddTaskAsync(task);
 
         if (result <= 0)
@@ -177,11 +157,45 @@ public partial class AddTaskViewModel : ObservableObject
             return;
         }
 
+        // Schedule notification
+        await ScheduleNotificationAsync(task);
+
         await Shell.Current.DisplayAlert(
             "Task Added",
             "Your task has been added successfully.",
             "OK");
 
         await Shell.Current.GoToAsync("..");
+    }
+
+    private async Task ScheduleNotificationAsync(TaskItem task)
+    {
+        string preference = Preferences.Default.Get(
+            $"NotificationPreference_{task.UserId}",
+            "1 hour before");
+
+        if (preference == "Notifications Off")
+            return;
+
+        TimeSpan offset = preference switch
+        {
+            "15 minutes before" => TimeSpan.FromMinutes(15),
+            "30 minutes before" => TimeSpan.FromMinutes(30),
+            "1 hour before" => TimeSpan.FromHours(1),
+            "1 day before" => TimeSpan.FromDays(1),
+            "2 days before" => TimeSpan.FromDays(2),
+            _ => TimeSpan.FromHours(1)
+        };
+
+        DateTime notificationTime = task.DueDate - offset;
+
+        if (notificationTime <= DateTime.Now)
+            return;
+
+        await _notificationService.ScheduleTaskReminderAsync(
+            task.Id,
+            task.Title,
+            $"Due at {task.DueDate:dd MMM yyyy HH:mm}",
+            notificationTime);
     }
 }

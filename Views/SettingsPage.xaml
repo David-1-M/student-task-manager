@@ -43,6 +43,38 @@
 
             </Frame>
 
+            <!-- Notifications -->
+            <Frame
+                Padding="15"
+                CornerRadius="12"
+                BorderColor="LightGray">
+
+                <VerticalStackLayout
+                    Spacing="10">
+
+                    <Label
+                        Text="🔔 Notifications"
+                        FontSize="20"
+                        FontAttributes="Bold"/>
+
+                    <Label
+                        Text="Task reminders"
+                        FontSize="16"/>
+
+                    <Picker
+                        Title="Reminder time"
+                        ItemsSource="{Binding NotificationOptions}"
+                        SelectedItem="{Binding NotificationPreference, Mode=TwoWay}"/>
+
+                    <Label
+                        Text="Choose when you want to be reminded about upcoming tasks."
+                        FontSize="13"
+                        TextColor="Gray"/>
+
+                </VerticalStackLayout>
+
+            </Frame>
+
             <!-- About -->
             <Frame
                 Padding="15"
