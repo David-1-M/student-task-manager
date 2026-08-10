@@ -9,8 +9,18 @@ public class NotificationService
 #if WINDOWS
         return false;
 #else
-        return await LocalNotificationCenter.Current
-            .RequestNotificationPermission();
+        try
+        {
+            return await LocalNotificationCenter.Current
+                .RequestNotificationPermission();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"Notification permission error: {ex}");
+
+            return false;
+        }
 #endif
     }
 
@@ -19,8 +29,18 @@ public class NotificationService
 #if WINDOWS
         return false;
 #else
-        return await LocalNotificationCenter.Current
-            .AreNotificationsEnabled();
+        try
+        {
+            return await LocalNotificationCenter.Current
+                .AreNotificationsEnabled();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"Notification status error: {ex}");
+
+            return false;
+        }
 #endif
     }
 
@@ -29,41 +49,73 @@ public class NotificationService
 #if WINDOWS
         await Task.CompletedTask;
 #else
-        var request = new NotificationRequest
+        try
         {
-            NotificationId = 999999,
-            Title = "Student Task Manager",
-            Description = "Notifications are working!"
-        };
+            var request = new NotificationRequest
+            {
+                NotificationId = 999999,
+                Title = "Student Task Manager",
+                Description = "Notifications are working!"
+            };
 
-        await LocalNotificationCenter.Current.Show(request);
+            await LocalNotificationCenter.Current.Show(request);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"Test notification error: {ex}");
+        }
 #endif
     }
 
-    public async Task ScheduleTaskReminderAsync(
+    public async Task<bool> ScheduleTaskReminderAsync(
         int taskId,
         string title,
         string description,
         DateTime notifyTime)
     {
 #if WINDOWS
-        await Task.CompletedTask;
+        return false;
 #else
-        if (notifyTime <= DateTime.Now)
-            return;
-
-        var request = new NotificationRequest
+        try
         {
-            NotificationId = taskId,
-            Title = $"Task Reminder: {title}",
-            Description = description,
-            Schedule = new NotificationRequestSchedule
-            {
-                NotifyTime = notifyTime
-            }
-        };
+            if (notifyTime <= DateTime.Now)
+                return false;
 
-        await LocalNotificationCenter.Current.Show(request);
+            bool notificationsEnabled =
+                await AreNotificationsEnabledAsync();
+
+            if (!notificationsEnabled)
+            {
+                System.Diagnostics.Debug.WriteLine(
+                    "Notifications are disabled.");
+
+                return false;
+            }
+
+            var request = new NotificationRequest
+            {
+                NotificationId = taskId,
+                Title = $"Task Reminder: {title}",
+                Description = description,
+
+                Schedule = new NotificationRequestSchedule
+                {
+                    NotifyTime = notifyTime
+                }
+            };
+
+            await LocalNotificationCenter.Current.Show(request);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"Schedule notification error: {ex}");
+
+            return false;
+        }
 #endif
     }
 
@@ -72,7 +124,15 @@ public class NotificationService
 #if WINDOWS
         return;
 #else
-        LocalNotificationCenter.Current.Cancel(taskId);
+        try
+        {
+            LocalNotificationCenter.Current.Cancel(taskId);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"Cancel notification error: {ex}");
+        }
 #endif
     }
 }
